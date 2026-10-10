@@ -43,8 +43,9 @@
 <h2 class="pagebreak">Sum&aacute;rio</h2>
 <ol>
   <li>Fase 1 &mdash; Estrutura e interface b&aacute;sica (4 microetapas)</li>
-  <li>Fase 2 &mdash; Cadastro de transa&ccedil;&otilde;es (5 microetapas)</li>
-  <li>Bug corrigido: saldo n&atilde;o aparecia ap&oacute;s F5</li>
+  <li>Fase 2 &mdash; Cadastro de transa&ccedil;&otilde;es (6 microetapas)</li>
+  <li>Bugs corrigidos (saldo ap&oacute;s F5 e transa&ccedil;&atilde;o sem valor)</li>
+  <li>GitHub: subindo o projeto para a nuvem</li>
   <li>Gloss&aacute;rio: conceitos aprendidos</li>
   <li>Pr&oacute;ximos passos</li>
 </ol>
@@ -215,6 +216,69 @@ function exibirSaldo() {
 <p><strong>Corre&ccedil;&atilde;o:</strong> chamada <code>exibirSaldo();</code> adicionada no final do arquivo.</p>
 <p><strong>Li&ccedil;&atilde;o:</strong> um c&oacute;digo pode estar funcionando (guardando certo) mas n&atilde;o fazer o que esperamos (mostrar). Por isso testamos sempre &mdash; &eacute; assim que se depura em projetos reais.</p>
 
+<h2 class="pagebreak">MICROETAPA 4 &mdash; O EXTRATO (ARRAY E JSON)</h2>
+<p><strong>Objetivo:</strong> cada transa&ccedil;&atilde;o aparece na tela como item do Extrato, e a lista inteira &eacute; salva na gaveta.</p>
+<pre>&lt;section&gt;
+  &lt;h2&gt;Extrato&lt;/h2&gt;
+  &lt;ul id="lista-transacoes"&gt;&lt;/ul&gt;
+&lt;/section&gt;</pre>
+<pre>var transacoes = JSON.parse(localStorage.getItem("transacoes")) || [];
+
+function salvarTransacoes() {
+  localStorage.setItem("transacoes", JSON.stringify(transacoes));
+}
+
+function exibirTransacoes() {
+  var lista = document.getElementById("lista-transacoes");
+  lista.textContent = "";
+
+  for (var i = 0; i &lt; transacoes.length; i++) {
+    var item = document.createElement("li");
+    var transacao = transacoes[i];
+    item.textContent = transacao.descricao + " — R$ " + transacao.valor.toFixed(2).replace(".", ",");
+    lista.appendChild(item);
+  }
+}</pre>
+<p><strong>Conceitos novos:</strong></p>
+<ul>
+  <li><strong>Array (lista) <code>[ ]</code>:</strong> guarda v&aacute;rios valores em fila.</li>
+  <li><strong>Objeto <code>{ chave: valor }</code>:</strong> agrupa informa&ccedil;&otilde;es (descri&ccedil;&atilde;o + valor).</li>
+  <li><strong><code>push(...)</code>:</strong> adiciona item no final da lista.</li>
+  <li><strong>La&ccedil;o <code>for</code>:</strong> <code>for (var i = 0; i &lt; transacoes.length; i++)</code> percorre a lista; <code>transacoes[i]</code> &eacute; o item da vez; <code>length</code> = tamanho.</li>
+  <li><strong><code>createElement("li")</code>:</strong> cria um item (ainda fora da tela).</li>
+  <li><strong><code>lista.appendChild(item)</code>:</strong> anexa o item criado dentro da lista.</li>
+  <li><strong>JSON:</strong> a gaveta s&oacute; guarda texto. <code>JSON.stringify</code> vira texto (salvar); <code>JSON.parse</code> volta para lista (ler).</li>
+  <li><strong><code>lista.textContent = ""</code>:</strong> limpa antes de redesenhar (sen&atilde;o a lista dobrava).</li>
+</ul>
+<p>&#127881; Fim da Fase 2: o app soma, subtrai, mostra o hist&oacute;rico e n&atilde;o perde nada.</p>
+
+<h2>BUG CORRIGIDO &mdash; transa&ccedil;&atilde;o sem valor entrava no extrato</h2>
+<p><strong>Sintoma:</strong> clicar em "Adicionar" com valor vazio criava a transa&ccedil;&atilde;o mesmo assim.</p>
+<p><strong>Diagnóstico:</strong> <code>Number("")</code> vira <code>0</code>, e n&atilde;o havia checagem antes de salvar. Campos de formul&aacute;rio sugerem, mas n&atilde;o bloqueiam &mdash; a prote&ccedil;&atilde;o de verdade &eacute; o c&oacute;digo.</p>
+<p><strong>Corre&ccedil;&atilde;o (valida&ccedil;&atilde;o), nos dois formul&aacute;rios:</strong></p>
+<pre>if (valor &lt;= 0) {
+  alert("Digite um valor maior que zero.");
+  return;
+}</pre>
+<p><strong>Conceitos novos:</strong> <code>if (condi&ccedil;&atilde;o)</code> = o "se" da programa&ccedil;&atilde;o; <code>alert("...")</code> = janelinha de aviso; <code>return;</code> = sai da fun&ccedil;&atilde;o na hora, ignorando o resto (o "ponto de interdi&ccedil;&atilde;o").</p>
+<p><strong>Li&ccedil;&atilde;o:</strong> todo dado que entra precisa ser <strong>validado</strong> antes de ser usado &mdash; base de seguran&ccedil;a em qualquer app.</p>
+
+<h2 class="pagebreak">GITHUB &mdash; SUBINDO O PROJETO PARA A NUVEM</h2>
+<p><strong>Git</strong> = a "m&aacute;quina do tempo" (registra vers&otilde;es, d&aacute; para voltar no tempo). <strong>GitHub</strong> = servi&ccedil;o gr&aacute;tis que guarda o reposit&oacute;rio na nuvem (backup + compartilhamento).</p>
+<p><strong>Passos feitos:</strong></p>
+<ul>
+  <li><code>git init</code> &rarr; transformou a pasta em reposit&oacute;rio.</li>
+  <li><code>git config user.name</code> / <code>user.email</code> &rarr; identidade para os commits.</li>
+  <li><code>git add .</code> &rarr; "empacotou" os arquivos (staging).</li>
+  <li><code>git commit -m "..."</code> &rarr; tirou a "fotografia" (vers&atilde;o salva).</li>
+  <li><code>git branch -m main</code> &rarr; branch no padr&atilde;o do GitHub.</li>
+  <li><code>git remote add origin &lt;url&gt;</code> &rarr; conectou com o reposit&oacute;rio na nuvem.</li>
+  <li><code>git push -u origin main</code> &rarr; <strong>enviou tudo.</strong></li>
+</ul>
+<p><strong>Guardar uma etapa nova:</strong> <code>git add .</code> &rarr; <code>git commit -m "mensagem"</code> &rarr; <code>git push</code>.</p>
+<p><strong>Conceitos:</strong> commit = vers&atilde;o registrada; branch = linha de desenvolvimento (main); remote = endere&ccedil;o da nuvem; push = enviar; reposit&oacute;rio = pasta + m&aacute;quina do tempo.</p>
+<p><strong>Link do projeto:</strong> https://github.com/taylorhdrescher/Controle-Financeiro (bot&atilde;o "commits" mostra a linha do tempo).</p>
+
 <h1>GLOSS&Aacute;RIO &mdash; Conceitos aprendidos</h1>
 <table>
   <tr><th>Conceito</th><th>O que &eacute;</th><th>Onde usamos</th></tr>
@@ -232,13 +296,26 @@ function exibirSaldo() {
   <tr><td>Media query</td><td>Regra CSS condicionada ao tamanho da tela</td><td>responsividade</td></tr>
   <tr><td>localStorage</td><td>Gaveta de mem&oacute;ria do navegador</td><td>salvar entre F5</td></tr>
   <tr><td>Persist&ecirc;ncia</td><td>Guardar dados al&eacute;m do programa rodando</td><td>saldo n&atilde;o some</td></tr>
+  <tr><td>Array</td><td>Lista que guarda v&aacute;rios valores</td><td>var transacoes = [...]</td></tr>
+  <tr><td>Objeto</td><td>Agrupa informa&ccedil;&otilde;es sobre a mesma coisa</td><td>{ descricao, valor }</td></tr>
+  <tr><td>push()</td><td>Adiciona item ao final da lista</td><td>transacoes.push(...)</td></tr>
+  <tr><td>length</td><td>Tamanho de uma lista</td><td>transacoes.length</td></tr>
+  <tr><td>La&ccedil;o for</td><td>Repete um bloco v&aacute;rias vezes</td><td>percorrer a lista</td></tr>
+  <tr><td>createElement</td><td>Cria um elemento no JS</td><td>criar &lt;li&gt;</td></tr>
+  <tr><td>appendChild</td><td>Anexa o elemento criado na p&aacute;gina</td><td>colocar &lt;li&gt; na lista</td></tr>
+  <tr><td>JSON</td><td>Formato texto que representa dados</td><td>salvar a lista na gaveta</td></tr>
+  <tr><td>Valida&ccedil;&atilde;o</td><td>Checar o dado antes de usar</td><td>if (valor &lt;= 0)</td></tr>
+  <tr><td>if</td><td>O "se" da programa&ccedil;&atilde;o</td><td>condi&ccedil;&atilde;o</td></tr>
+  <tr><td>alert()</td><td>Janelinha de aviso do navegador</td><td>"Digite um valor maior..."</td></tr>
+  <tr><td>return</td><td>Sai da fun&ccedil;&atilde;o na hora</td><td>interromper envio inv&aacute;lido</td></tr>
+  <tr><td>Git / commit</td><td>M&aacute;quina do tempo / vers&atilde;o registrada</td><td>backup do projeto</td></tr>
+  <tr><td>GitHub / push</td><td>Nuvem / enviar para a nuvem</td><td>reposit&oacute;rio online</td></tr>
 </table>
 
 <h1>PR&Oacute;XIMOS PASSOS</h1>
 <ul>
-  <li>Microetapa 4: Listar as transa&ccedil;&otilde;es na tela (conceitos: <strong>array</strong> para v&aacute;rios itens + <strong>JSON</strong> para a gaveta guardar a lista).</li>
-  <li>Fase 3: Categorias.</li>
-  <li>Fase 4: Resumo e cores (verde receita / vermelho despesa).</li>
+  <li>Fase 3: Categorias (moradia, alimenta&ccedil;&atilde;o, lazer...) &mdash; organizando as despesas.</li>
+  <li>Fase 4: Resumo do m&ecirc;s com cores (verde receita / vermelho despesa).</li>
   <li>Fase 5: Diferenciais (importa&ccedil;&atilde;o de extrato CSV ou Open Finance simulado).</li>
 </ul>
 

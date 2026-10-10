@@ -28,20 +28,23 @@ Site responsivo de controle financeiro pessoal (receitas, despesas e resumo de s
 controle-financeiro/
 ├── index.html    → estrutura da página
 ├── style.css     → visual (tema dark + laranja responsivo)
-├── app.js        → lógica (saldo, formulários, localStorage)
+├── app.js        → lógica (saldo, formulários, extrato, localStorage)
+├── README.md     → capa do repositório no GitHub
 ├── PROGRESSO.md  → memória do projeto (estado, decisões, fases)
-└── TUTORIAL.md   → EBOOK: tudo que foi ensinado, microetapa por microetapa
+├── TUTORIAL.md   → EBOOK: tudo que foi ensinado, microetapa por microetapa
+├── TUTORIAL.pdf  → EBOOK em PDF (gerado a partir do ebook.html)
+└── ebook.html    → versão formatada do tutorial (imprimível)
 ```
 
 ## Plano geral (fases)
 1. Fase 1 — Estrutura e interface básica ✅ concluída (4 microetapas)
-2. Fase 2 — Cadastro de transações (em andamento — Microetapa 4: listar transações)
+2. Fase 2 — Cadastro de transações ✅ concluída (6 microetapas)
 3. Fase 3 — Categorias e organização
 4. Fase 4 — Resumo e saldo total (verde/vermelho nos valores)
 5. Fase 5 — Aperfeiçoamentos (visual refinado, metas, diferenciais como importação CSV / Open Finance simulado)
 
 ## Fase atual
-Fase 2 — Cadastro de transações
+Fase 3 — Categorias e organização (próxima a começar)
 
 ## Microetapas concluídas
 - Fase 1 — Estrutura e interface básica
@@ -67,6 +70,11 @@ Fase 2 — Cadastro de transações
 - Media query para responsividade.
 - Eventos (submit), addEventListener, preventDefault, .value, Number().
 - Persistência: localStorage (getItem/setItem), gaveta só guarda texto.
+- Array (lista), objeto {chave: valor}, push(), length, laço for.
+- Criar elementos na tela: createElement + appendChild.
+- JSON: stringify (texto) e parse (lista) — ponte com a gaveta.
+- Validação de entrada: if, alert(), return.
+- Git/GitHub: init, config, add, commit, branch main, remote, push.
 
 ## Problemas pendentes
 Nenhum.
@@ -79,4 +87,6 @@ Nenhum.
 Fase 2 concluída. Próxima: Fase 3 — Categorias e organização.
 
 ## Observações
-- Todo o conteúdo didático (explicações de cada microetapa e o bug corrigido) está salvo de forma permanente em **TUTORIAL.md** (base do ebook em PDF).
+- Todo o conteúdo didático (explicações de cada microetapa, bugs corrigidos e GitHub) está salvo de forma permanente em **TUTORIAL.md** e regenerado em **TUTORIAL.pdf**.
+- Para retomar: abrir o opencode na pasta `controle-financeiro` e dizer "Leia o PROGRESSO.md e o TUTORIAL.md e continue de onde paramos".
+- Rotina Git: após cada etapa, `git add .` → `git commit -m "mensagem"` → `git push`.

@@ -24,9 +24,11 @@
    - Microetapa 2: O botão Adicionar funciona
    - Microetapa 3: O formulário de despesa
    - Microetapa 3b: Salvando com localStorage
-   - Bug corrigido: saldo não aparecia após F5
-3. Conceitos aprendidos até aqui (glossário)
-4. Próximos passos
+   - Microetapa 4: O extrato (array e JSON)
+   - Bugs corrigidos: saldo após F5 + transação sem valor
+3. GitHub: subindo o projeto para a nuvem
+4. Conceitos aprendidos até aqui (glossário)
+5. Próximos passos
 
 ---
 
@@ -212,7 +214,7 @@ document.getElementById("form-receita").addEventListener("submit", function (eve
 
 ## Microetapa 3 — O formulário de despesa
 
-**Objetivo:** cadastrar despesas — mesma estrutura da receita, mas **subtral valor**.
+**Objetivo:** cadastrar despesas — mesma estrutura da receita, mas **subtrai** valor.
 
 Campos com **ids diferentes** (`descricao-despesa`, `valor-despesa`) porque **ids devem ser únicos** na página — senão o JS não sabe qual campo é qual.
 
@@ -254,6 +256,105 @@ function exibirSaldo() {
 
 ---
 
+## Microetapa 4 — O extrato (array e JSON)
+
+**Objetivo:** cada transação aparece na tela como item do "Extrato" (descrição + valor), e a lista inteira também é salva na gaveta.
+
+HTML (nova seção):
+```html
+<section>
+  <h2>Extrato</h2>
+  <ul id="lista-transacoes"></ul>
+</section>
+```
+
+CSS:
+```css
+ul { list-style: none; padding: 0; margin: 0; }
+li { background-color: #111827; padding: 10px; border-radius: 6px; margin-bottom: 8px; }
+```
+
+JS (as novidades):
+```js
+var transacoes = JSON.parse(localStorage.getItem("transacoes")) || [];
+
+function salvarTransacoes() {
+  localStorage.setItem("transacoes", JSON.stringify(transacoes));
+}
+
+function exibirTransacoes() {
+  var lista = document.getElementById("lista-transacoes");
+  lista.textContent = "";
+
+  for (var i = 0; i < transacoes.length; i++) {
+    var item = document.createElement("li");
+    var transacao = transacoes[i];
+    item.textContent = transacao.descricao + " — R$ " + transacao.valor.toFixed(2).replace(".", ",");
+    lista.appendChild(item);
+  }
+}
+```
+
+E nos dois formulários, ao adicionar: `transacoes.push({ descricao: descricao, valor: valor });` + `salvarTransacoes();` + `exibirTransacoes();`
+
+**Conceitos novos:**
+- **Array (lista):** `[ ]` guarda vários valores em fila. `var transacoes` é a lista de transações.
+- **Objeto:** `{ chave: valor }` guarda várias informações sobre a mesma coisa (descrição + valor).
+- **`push(...)`:** adiciona um item no final da lista.
+- **Laço `for`:** repete enquanto a condição valer. `for (var i = 0; i < transacoes.length; i++)` percorre a lista do primeiro ao último; `transacoes[i]` é o item da vez. `length` = tamanho.
+- **`document.createElement("li")`:** cria um item (ainda fora da tela).
+- **`lista.appendChild(item)`:** anexa o item criado dentro da lista da página.
+- **JSON:** a gaveta só guarda texto. `JSON.stringify(transacoes)` transforma a lista em texto (para salvar); `JSON.parse(...)` transforma de volta em lista (para ler). É a "ponte texto ↔ lista".
+- **`lista.textContent = ""`:** limpa antes de redesenhar — sem isso, a lista dobraria a cada clique.
+
+🎉 **Fim da Fase 2.** O app soma, subtrai, mostra o histórico e não perde nada.
+
+---
+
+## BUG CORRIGIDO — transação sem valor entrava no extrato
+
+**Sintoma (você relatou):** clicar em "Adicionar" com o valor vazio criava a transação mesmo assim.
+
+**Diagnóstico:** `Number("")` vira `0` (campo vazio = 0), e não havia nenhuma checagem antes de salvar. Os campos de formulário *sugerem*, mas não *bloqueiam* — a proteção de verdade é feita no código.
+
+**Correção (validação de entrada)** — adicionada nos DOIS formulários, antes de qualquer coisa:
+```js
+if (valor <= 0) {
+  alert("Digite um valor maior que zero.");
+  return;
+}
+```
+
+**Conceitos novos:**
+- **`if (condição)`:** o "se" da programação — executa o bloco só se a condição for verdadeira.
+- **`alert("...")`:** janelinha de aviso do navegador (retorno ao usuário).
+- **`return;`:** sai da função na hora, ignorando o resto. Como a checagem vem antes do saldo/extrato, nada é somado nem listado. É o "ponto de interdição".
+
+**Lição:** todo dado que entra no sistema precisa ser **validado** antes de ser usado. Isso se chama validação de entrada e é uma base de segurança em qualquer app.
+
+---
+
+## GITHUB — subindo o projeto para a nuvem
+
+**O que é:** **Git** = a "máquina do tempo" do projeto (registra versões dos arquivos, dá para voltar no tempo). **GitHub** = serviço grátis que guarda o repositório na nuvem (backup + compartilhamento com o professor).
+
+**O que fizemos:**
+1. `git init` → transformou a pasta em repositório (criou a pasta escondida `.git`).
+2. `git config user.name` e `git config user.email` → identidade para assinar os commits.
+3. `git add .` → "empacotou" os arquivos (staging).
+4. `git commit -m "..."` → tirou a "fotografia" (versão salva).
+5. `git branch -m main` → branch no padrão do GitHub.
+6. `git remote add origin <url>` → conectou com o repositório no GitHub.
+7. `git push -u origin main` → **enviou tudo para a nuvem.**
+
+**Guardar uma etapa nova:** `git add .` → `git commit -m "mensagem"` → `git push`.
+
+**Conceitos novos:** **commit** = versão registrada do projeto (com mensagem explicando o que mudou); **branch** = uma "linha" de desenvolvimento (usamos a `main`); **remote** = o endereço da cópia na nuvem; **push** = enviar para o GitHub; **repositório** = pasta do projeto + máquina do tempo embutida.
+
+**Link do projeto:** https://github.com/taylorhdrescher/Controle-Financeiro — no botão "commits" dá para ver a linha do tempo do projeto.
+
+---
+
 ## BUG CORRIGIDO — saldo não aparecia após F5
 
 **Sintoma (você relatou):** após atualizar, o saldo sumia da tela; ao fazer uma transação nova, somava com o valor antigo.
@@ -290,11 +391,24 @@ exibirSaldo();
 | Media query | Regra CSS condicionada ao tamanho da tela | responsividade |
 | localStorage | Gaveta de memória do navegador | salvar entre F5 |
 | Persistência | Guardar dados além do programa rodando | saldo não some |
+| Array | Lista que guarda vários valores | `var transacoes = [...]` |
+| Objeto | Agrupa informações sobre a mesma coisa | `{ descricao, valor }` |
+| push() | Adiciona item ao final da lista | `transacoes.push(...)` |
+| length | Tamanho de uma lista | `transacoes.length` |
+| Laço for | Repete um bloco várias vezes | percorrer a lista |
+| createElement | Cria um elemento no JS | criar `<li>` |
+| appendChild | Anexa o elemento criado na página | colocar `<li>` na lista |
+| JSON | Formato texto que representa dados | salvar a lista na gaveta |
+| Validação | Checar o dado antes de usar | `if (valor <= 0)` |
+| if | O "se" da programação | condição |
+| alert() | Janelinha de aviso do navegador | "Digite um valor maior..." |
+| return | Sai da função na hora | interromper envio inválido |
+| Git / commit | Máquina do tempo / versão registrada | backup do projeto |
+| GitHub / push | Nuvem / enviar para a nuvem | repositório online |
 
 ---
 
 # PRÓXIMOS PASSOS
-- [ ] Microetapa 4: Listar as transações na tela (dicas: **array** para vários itens + **JSON** para a gaveta guardar a lista).
-- Fase 3: Categorias.
-- Fase 4: Resumo e cores (verde receita / vermelho despesa).
+- Fase 3: Categorias (moradia, alimentação, lazer...) — organizando as despesas.
+- Fase 4: Resumo do mês com cores (verde receita / vermelho despesa).
 - Fase 5: Diferenciais (importação de extrato CSV ou Open Finance simulado).
