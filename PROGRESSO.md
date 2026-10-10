@@ -5,6 +5,12 @@
 ## Descrição do projeto
 Site responsivo de controle financeiro pessoal (receitas, despesas e resumo de saldo), construído do zero como projeto de faculdade, com acompanhamento didático passo a passo. Estilo visual inspirado no Meu Planner Financeiro (dark + laranja).
 
+## GitHub
+- Repositório: https://github.com/taylorhdrescher/Controle-Financeiro
+- Identidade git configurada: Taylor Drescher <taylorhamiltondrescher24@gmail.com>
+- Branch: main
+- Primeiro commit: dc6ca06 (projeto inicial) + b6eac6f (README.md)
+
 ## Decisões já tomadas
 - Formato: **site responsivo** (funciona em PC e celular).
 - Tecnologias: HTML, CSS, JavaScript puro e localStorage. (Sem frameworks, sem servidor — mais simples para aprender.)
