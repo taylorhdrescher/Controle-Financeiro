@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>EBOOK — Controle Financeiro do Zero</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 40px 30px;
+      color: #1f2937;
+      line-height: 1.6;
+    }
+    h1 { color: #ea580c; border-bottom: 3px solid #f97316; padding-bottom: 10px; }
+    h2 { color: #111827; border-bottom: 1px solid #ccc; padding-bottom: 6px; margin-top: 40px; }
+    h3 { color: #f97316; }
+    pre {
+      background: #111827; color: #f9fafb;
+      padding: 14px; border-radius: 8px; overflow-x: auto; font-size: 14px;
+    }
+    code { font-family: Consolas, monospace; }
+    table { border-collapse: collapse; width: 100%; margin: 12px 0; }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+    th { background: #f97316; color: white; }
+    blockquote { border-left: 4px solid #f97316; margin: 12px 0; padding: 8px 16px; background: #fdf3ea; }
+    .pagebreak { page-break-before: always; }
+  </style>
+</head>
+<body>
+
+<h1>EBOOK — Controle Financeiro do Zero</h1>
+<p><strong>Tutorial guiado, microetapa por microetapa.</strong></p>
+<blockquote>Projeto didático: um site responsivo de controle financeiro pessoal (receitas, despesas e saldo), construído do zero, ensinando programação para iniciantes absolutos.</blockquote>
+
+<h2>Como funciona este tutorial</h2>
+<ul>
+  <li>Avançamos <strong>uma microetapa por vez</strong>: objetivo &rarr; implementa&ccedil;&atilde;o &rarr; explica&ccedil;&atilde;o &rarr; teste &rarr; resultado.</li>
+  <li>Linguagem acess&iacute;vel: cada conceito novo &eacute; explicado primeiro em portugu&ecirc;s simples.</li>
+  <li>Usa apenas HTML, CSS e JavaScript puro &mdash; sem instalar nada al&eacute;m de um editor (VSCode, opcional).</li>
+</ul>
+
+<h2 class="pagebreak">Sum&aacute;rio</h2>
+<ol>
+  <li>Fase 1 &mdash; Estrutura e interface b&aacute;sica (4 microetapas)</li>
+  <li>Fase 2 &mdash; Cadastro de transa&ccedil;&otilde;es (5 microetapas)</li>
+  <li>Bug corrigido: saldo n&atilde;o aparecia ap&oacute;s F5</li>
+  <li>Gloss&aacute;rio: conceitos aprendidos</li>
+  <li>Pr&oacute;ximos passos</li>
+</ol>
+
+<h1>FASE 1 &mdash; ESTRUTURA E INTERFACE B&Aacute;SICA</h1>
+
+<h2>Microetapa 1 &mdash; A estrutura de arquivos</h2>
+<p><strong>Objetivo:</strong> criar a &ldquo;casa&rdquo; do projeto: uma pasta com 4 arquivos.</p>
+<table>
+  <tr><th>Arquivo</th><th>Fun&ccedil;&atilde;o</th></tr>
+  <tr><td>index.html</td><td>Estrutura da p&aacute;gina (textos, campos, bot&otilde;es)</td></tr>
+  <tr><td>style.css</td><td>Visual (cores, espa&ccedil;amento, responsividade)</td></tr>
+  <tr><td>app.js</td><td>L&oacute;gica (somar, guardar, mostrar dados)</td></tr>
+  <tr><td>PROGRESSO.md</td><td>Mem&oacute;ria do projeto (di&aacute;rio de desenvolvimento)</td></tr>
+</table>
+<p><strong>Conceito novo &mdash; extens&atilde;o de arquivo:</strong> &eacute; o final do nome (<code>html</code>, <code>css</code>, <code>js</code>). Diz ao computador o tipo do arquivo e qual programa sabe abrir. O <code>index.html</code> &eacute; sempre a porta de entrada de um site.</p>
+
+<h2>Microetapa 2 &mdash; A base do HTML</h2>
+<p><strong>Objetivo:</strong> montar o esqueleto: cabe&ccedil;alho e &aacute;rea principal.</p>
+<pre>&lt;body&gt;
+  &lt;header&gt;
+    &lt;h1&gt;Meu Controle Financeiro&lt;/h1&gt;
+  &lt;/header&gt;
+  &lt;main&gt;
+    &lt;p&gt;Aqui v&atilde;o ficar seus registros de receitas e despesas.&lt;/p&gt;
+  &lt;/main&gt;
+&lt;/body&gt;</pre>
+<ul>
+  <li><code>&lt;header&gt;</code> &rarr; topo da p&aacute;gina (cabe&ccedil;alho). Tag sem&acirc;ntica.</li>
+  <li><code>&lt;h1&gt;</code> &rarr; t&iacute;tulo grande.</li>
+  <li><code>&lt;main&gt;</code> &rarr; &aacute;rea principal do conte&uacute;do.</li>
+  <li><code>&lt;p&gt;</code> &rarr; par&aacute;grafo.</li>
+</ul>
+<p><strong>Conceito novo &mdash; tags em pares:</strong> <code>&lt;header&gt;</code> abre e <code>&lt;/header&gt;</code> fecha. Como caixas: o que est&aacute; dentro pertence &agrave; caixa, e caixas podem conter outras (o <code>&lt;h1&gt;</code> dentro do <code>&lt;header&gt;</code>).</p>
+
+<h2>Microetapa 3 &mdash; O primeiro CSS</h2>
+<p><strong>Objetivo:</strong> dar cores e organiza&ccedil;&atilde;o; funcionar em PC e celular.</p>
+<p>Conex&atilde;o ao HTML: <code>&lt;link rel="stylesheet" href="style.css"&gt;</code></p>
+<pre>body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background-color: #f4f4f9;
+  color: #333;
+}
+
+header {
+  background-color: #4a90e2;
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  main {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+}</pre>
+<ul>
+  <li><code>body</code> &rarr; regras gerais. <code>margin: 0</code> remove espa&ccedil;os autom&aacute;ticos; <code>#f4f4f9</code> &eacute; <strong>c&oacute;digo de cor hexadecimal</strong> (come&ccedil;a com <code>#</code>).</li>
+  <li><code>padding</code> &rarr; espa&ccedil;o interno da caixa.</li>
+  <li><code>text-align: center</code> &rarr; centraliza texto.</li>
+</ul>
+<p><strong>Conceito novo &mdash; media query (responsividade):</strong> <code>@media (min-width: 768px)</code> vale somente quando a tela tem pelo menos 768px. No celular o conte&uacute;do ocupa a largura toda; no PC fica estreito e centralizado (<code>margin: 0 auto</code>).</p>
+
+<h2>Microetapa 4 &mdash; O primeiro JavaScript</h2>
+<p><strong>Objetivo:</strong> JS escreve o saldo na tela. Vale para o projeto inteiro: <strong>HTML define o lugar, CSS enfeita, JS comanda.</strong></p>
+<pre>&lt;p&gt;R$ &lt;span id="saldo"&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;script src="app.js"&gt;&lt;/script&gt;</pre>
+<pre>var saldo = 0;
+
+function exibirSaldo() {
+  document.getElementById("saldo").textContent = "R$ " + saldo.toFixed(2).replace(".", ",");
+}
+
+exibirSaldo();</pre>
+<ul>
+  <li><code>&lt;span id="saldo"&gt;</code> &rarr; caixinha com um <strong>endere&ccedil;o</strong> (<code>id</code>) que o JS acha.</li>
+  <li><code>&lt;script&gt;</code> &rarr; carrega o JS (como o <code>&lt;link&gt;</code> carrega o CSS).</li>
+  <li><code>var saldo = 0;</code> &rarr; <strong>vari&aacute;vel</strong>: caixa na mem&oacute;ria que guarda um valor.</li>
+  <li><code>function exibirSaldo() {...}</code> &rarr; <strong>fun&ccedil;&atilde;o</strong>: bloco que executa quando chamado.</li>
+  <li><code>document.getElementById("saldo")</code> &rarr; o JS pega o elemento pelo id.</li>
+  <li><code>.textContent</code> &rarr; substitui o texto dentro do elemento.</li>
+  <li><code>toFixed(2)</code> &rarr; 2 casas decimais. <code>.replace(".", ",")</code> &rarr; formato brasileiro.</li>
+  <li><code>exibirSaldo();</code> &rarr; <strong>chamada da fun&ccedil;&atilde;o</strong> &mdash; sem ela, a fun&ccedil;&atilde;o n&atilde;o roda.</li>
+</ul>
+
+<h1 class="pagebreak">FASE 2 &mdash; CADASTRO DE TRANSA&Ccedil;&Otilde;ES</h1>
+
+<h2>Microetapa 1 &mdash; O formul&aacute;rio de receita</h2>
+<p><strong>Objetivo:</strong> criar a tela para digitar descri&ccedil;&atilde;o e valor de uma receita.</p>
+<pre>&lt;form id="form-receita"&gt;
+  &lt;label for="descricao"&gt;Descri&ccedil;&atilde;o&lt;/label&gt;
+  &lt;input type="text" id="descricao" placeholder="Ex: Sal&aacute;rio"&gt;
+  &lt;label for="valor"&gt;Valor (R$)&lt;/label&gt;
+  &lt;input type="number" id="valor" step="0.01" min="0"&gt;
+  &lt;button type="submit"&gt;Adicionar&lt;/button&gt;
+&lt;/form&gt;</pre>
+<ul>
+  <li><code>&lt;form&gt;</code> &rarr; formul&aacute;rio; ganhou <code>id</code> para o JS achar.</li>
+  <li><code>&lt;label for="..."&gt;</code> &rarr; etiqueta ligada ao campo de mesmo <code>id</code>.</li>
+  <li><code>input type="text"</code> &rarr; campo de texto; <code>placeholder</code> = sugest&atilde;o que some ao digitar.</li>
+  <li><code>input type="number"</code> &rarr; s&oacute; n&uacute;meros; <code>step="0.01"</code> = centavos; <code>min="0"</code> barra negativos.</li>
+  <li><code>button type="submit"</code> &rarr; bot&atilde;o que envia; o JS vai interceptar.</li>
+</ul>
+
+<h2>Microetapa 1b &mdash; O visual dark + laranja</h2>
+<p><strong>Objetivo:</strong> tema escuro com laranja, inspirado no Meu Planner Financeiro.</p>
+<p>Paleta: fundo <code>#111827</code>, cart&otilde;es <code>#1f2937</code>, destaque <code>#f97316</code>, texto <code>#f9fafb</code>.</p>
+<ul>
+  <li><strong>Dark mode cria profundidade:</strong> o que est&aacute; por cima &eacute; mais claro que o fundo.</li>
+  <li><strong>Seletor combinado</strong> <code>header h1</code> = o <code>&lt;h1&gt;</code> dentro do <code>&lt;header&gt;</code>.</li>
+  <li><code>border-radius</code> nos &lt;section&gt; &rarr; cantos arredondados viram cart&otilde;es.</li>
+  <li>Contraste: campo escuro com texto claro (legibilidade).</li>
+  <li><code>#saldo</code> com <code>font-size: 2em</code> e <code>font-weight: bold</code> &rarr; saldo em destaque.</li>
+</ul>
+
+<h2>Microetapa 2 &mdash; O bot&atilde;o Adicionar funciona</h2>
+<p><strong>Objetivo:</strong> o clique pega o valor digitado, soma ao saldo e mostra na tela.</p>
+<pre>document.getElementById("form-receita").addEventListener("submit", function (evento) {
+  evento.preventDefault();
+
+  var descricao = document.getElementById("descricao").value;
+  var valor = Number(document.getElementById("valor").value);
+
+  saldo = saldo + valor;
+  exibirSaldo();
+});</pre>
+<ul>
+  <li><code>addEventListener("submit", ...)</code> &rarr; o JS <strong>escuta</strong> o evento de envio.</li>
+  <li><code>evento.preventDefault()</code> &rarr; <strong>impede recarregar a p&aacute;gina</strong> (comportamento padr&atilde;o).</li>
+  <li><code>.value</code> &rarr; l&ecirc; o que foi digitado.</li>
+  <li><code>Number(...)</code> &rarr; converte texto em n&uacute;mero: <code>"250" + 100</code> n&atilde;o soma, vira <code>"250100"</code>.</li>
+  <li><code>var descricao</code> &rarr; guardada para a pr&oacute;xima etapa (lista de transa&ccedil;&otilde;es).</li>
+</ul>
+<p><strong>Conceito novo &mdash; evento:</strong> um sinal do navegador (&ldquo;algu&eacute;m clicou&rdquo;); o JS escuta e reage.</p>
+
+<h2>Microetapa 3 &mdash; O formul&aacute;rio de despesa</h2>
+<p><strong>Objetivo:</strong> cadastrar despesas &mdash; mesma estrutura da receita, mas <strong>subtrai</strong> valor.</p>
+<p>Os campos usam <strong>ids diferentes</strong> (<code>descricao-despesa</code>, <code>valor-despesa</code>) porque <strong>ids devem ser &uacute;nicos</strong> na p&aacute;gina.</p>
+<pre>document.getElementById("form-despesa").addEventListener("submit", function (evento) {
+  evento.preventDefault();
+  var valor = Number(document.getElementById("valor-despesa").value);
+  saldo = saldo - valor;
+  exibirSaldo();
+});</pre>
+<p><strong>Li&ccedil;&atilde;o sobre padr&atilde;o:</strong> copiamos uma estrutura parecida e ajustamos o essencial (o <code>id</code> e o sinal <code>-</code>). Mais adiante vamos reduzir a repeti&ccedil;&atilde;o.</p>
+
+<h2>Microetapa 3b &mdash; Salvando com localStorage</h2>
+<p><strong>Objetivo:</strong> os dados sobrevivem ao F5, sem servidor.</p>
+<pre>var saldo = Number(localStorage.getItem("saldo")) || 0;
+
+function exibirSaldo() {
+  document.getElementById("saldo").textContent = "R$ " + saldo.toFixed(2).replace(".", ",");
+  localStorage.setItem("saldo", saldo);
+}</pre>
+<ul>
+  <li><code>localStorage.getItem("saldo")</code> &rarr; l&ecirc; da &ldquo;gaveta&rdquo; do navegador (texto ou <code>null</code>).</li>
+  <li><code>Number(...)</code> &rarr; converte de volta para n&uacute;mero (a gaveta s&oacute; guarda texto).</li>
+  <li><code>|| 0</code> &rarr; &ldquo;ou ent&atilde;o 0&rdquo;: sem nada guardado, come&ccedil;a em 0.</li>
+  <li><code>localStorage.setItem("saldo", saldo)</code> &rarr; grava; ficou dentro de <code>exibirSaldo()</code>, que roda a cada mudan&ccedil;a &rarr; sempre que muda, salva (um s&oacute; lugar para salvar evita bugs).</li>
+</ul>
+<p><strong>Conceito novo &mdash; persist&ecirc;ncia:</strong> guardar informa&ccedil;&otilde;es para al&eacute;m do momento em que o programa roda.</p>
+
+<h2 class="pagebreak">BUG CORRIGIDO &mdash; saldo n&atilde;o aparecia ap&oacute;s F5</h2>
+<p><strong>Sintoma:</strong> ap&oacute;s atualizar, o saldo sumia; ao fazer uma transa&ccedil;&atilde;o nova, somava com o valor antigo.</p>
+<p><strong>Diagn&oacute;stico:</strong> a gaveta (localStorage) sempre funcionou. Faltava <strong>pintar o n&uacute;mero na tela ao abrir a p&aacute;gina</strong>: a chamada inicial <code>exibirSaldo();</code> no final do <code>app.js</code> havia sido perdida.</p>
+<p><strong>Corre&ccedil;&atilde;o:</strong> chamada <code>exibirSaldo();</code> adicionada no final do arquivo.</p>
+<p><strong>Li&ccedil;&atilde;o:</strong> um c&oacute;digo pode estar funcionando (guardando certo) mas n&atilde;o fazer o que esperamos (mostrar). Por isso testamos sempre &mdash; &eacute; assim que se depura em projetos reais.</p>
+
+<h1>GLOSS&Aacute;RIO &mdash; Conceitos aprendidos</h1>
+<table>
+  <tr><th>Conceito</th><th>O que &eacute;</th><th>Onde usamos</th></tr>
+  <tr><td>Extens&atilde;o de arquivo</td><td>Final do nome que identifica o tipo</td><td>.html, .css, .js</td></tr>
+  <tr><td>Tag em par</td><td>Elemento HTML que abre e fecha</td><td>&lt;h1&gt;&hellip;&lt;/h1&gt;</td></tr>
+  <tr><td>Aninhamento</td><td>Caixas dentro de caixas</td><td>&lt;h1&gt; dentro de &lt;header&gt;</td></tr>
+  <tr><td>Vari&aacute;vel</td><td>Caixa na mem&oacute;ria que guarda valor</td><td>var saldo</td></tr>
+  <tr><td>Fun&ccedil;&atilde;o</td><td>Bloco que executa quando chamado</td><td>function exibirSaldo()</td></tr>
+  <tr><td>Id</td><td>Endere&ccedil;o &uacute;nico de um elemento</td><td>id="saldo"</td></tr>
+  <tr><td>Evento</td><td>Sinal do navegador (clique etc.)</td><td>addEventListener("submit")</td></tr>
+  <tr><td>preventDefault</td><td>Impede o comportamento padr&atilde;o</td><td>parar recarga do form</td></tr>
+  <tr><td>.value</td><td>L&ecirc; o que foi digitado no campo</td><td>getElementById("valor").value</td></tr>
+  <tr><td>Number()</td><td>Converte texto em n&uacute;mero</td><td>Number("250") &rarr; 250</td></tr>
+  <tr><td>toFixed(2)</td><td>For&ccedil;a 2 casas decimais</td><td>R$ 0,00</td></tr>
+  <tr><td>Media query</td><td>Regra CSS condicionada ao tamanho da tela</td><td>responsividade</td></tr>
+  <tr><td>localStorage</td><td>Gaveta de mem&oacute;ria do navegador</td><td>salvar entre F5</td></tr>
+  <tr><td>Persist&ecirc;ncia</td><td>Guardar dados al&eacute;m do programa rodando</td><td>saldo n&atilde;o some</td></tr>
+</table>
+
+<h1>PR&Oacute;XIMOS PASSOS</h1>
+<ul>
+  <li>Microetapa 4: Listar as transa&ccedil;&otilde;es na tela (conceitos: <strong>array</strong> para v&aacute;rios itens + <strong>JSON</strong> para a gaveta guardar a lista).</li>
+  <li>Fase 3: Categorias.</li>
+  <li>Fase 4: Resumo e cores (verde receita / vermelho despesa).</li>
+  <li>Fase 5: Diferenciais (importa&ccedil;&atilde;o de extrato CSV ou Open Finance simulado).</li>
+</ul>
+
+</body>
+</html>

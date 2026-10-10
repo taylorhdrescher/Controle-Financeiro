@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Controle Financeiro</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Meu Controle Financeiro</h1>
+  </header>
+  <main>
+    <section>
+      <h2>Saldo atual</h2>
+      <p>R$ <span id="saldo"></span></p>
+    </section>
+
+    <section>
+      <h2>Adicionar receita</h2>
+      <form id="form-receita">
+        <label for="descricao">Descrição</label>
+        <input type="text" id="descricao" placeholder="Ex: Salário">
+        <label for="valor">Valor (R$)</label>
+        <input type="number" id="valor" step="0.01" min="0">
+        <button type="submit">Adicionar</button>
+      </form>
+    </section>
+
+    <section>
+      <h2>Adicionar despesa</h2>
+      <form id="form-despesa">
+        <label for="descricao-despesa">Descrição</label>
+        <input type="text" id="descricao-despesa" placeholder="Ex: Aluguel">
+        <label for="valor-despesa">Valor (R$)</label>
+        <input type="number" id="valor-despesa" step="0.01" min="0">
+        <button type="submit">Adicionar</button>
+      </form>
+    </section>
+
+    <section>
+      <h2>Extrato</h2>
+      <ul id="lista-transacoes"></ul>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
