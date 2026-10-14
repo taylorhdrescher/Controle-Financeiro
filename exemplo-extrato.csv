@@ -1,0 +1,6 @@
+descricao,valor,tipo,categoria
+Salario,3000,receita,
+Mercado,450.75,despesa,Alimentação
+Aluguel,1200,despesa,Moradia
+Uber,35.90,despesa,Transporte
+Cinema,60,despesa,Lazer

@@ -47,6 +47,7 @@
   <li>Bugs corrigidos (saldo ap&oacute;s F5 e transa&ccedil;&atilde;o sem valor)</li>
   <li>Fase 3 &mdash; Categorias e organiza&ccedil;&atilde;o (3 microetapas)</li>
   <li>Fase 4 &mdash; Resumo e total por categoria (3 microetapas)</li>
+  <li>Fase 5 &mdash; Aperfei&ccedil;oamentos e diferenciais (em andamento)</li>
   <li>GitHub: subindo o projeto para a nuvem</li>
   <li>Gloss&aacute;rio: conceitos aprendidos</li>
   <li>Pr&oacute;ximos passos</li>
@@ -414,6 +415,105 @@ item.className = despesa ? "despesa" : "receita";</pre>
 </ul>
 <p>&#127881; Fim da Fase 4: saldo, resumo com cores e gastos por categoria.</p>
 
+<h1 class="pagebreak">FASE 5 &mdash; APERFEI&Ccedil;OAMENTOS E DIFERENCIAIS</h1>
+
+<h2>Microetapa 1 &mdash; Importa&ccedil;&atilde;o de extrato em CSV</h2>
+<p><strong>Objetivo:</strong> em vez de digitar transa&ccedil;&atilde;o por transa&ccedil;&atilde;o, o usu&aacute;rio escolhe um arquivo <code>.csv</code> e o app lan&ccedil;a todas de uma vez &mdash; o &ldquo;diferencial&rdquo; do projeto.</p>
+<p><strong>Formato adotado</strong> (uma transa&ccedil;&atilde;o por linha), colunas separadas por v&iacute;rgula e decimal com ponto:</p>
+<pre>descricao,valor,tipo,categoria
+Salario,3000,receita,
+Mercado,450.75,despesa,Alimentação
+Aluguel,1200,despesa,Moradia</pre>
+<pre>&lt;section&gt;
+  &lt;h2&gt;Importar extrato (CSV)&lt;/h2&gt;
+  &lt;p class="dica"&gt;Formato: descricao,valor,tipo,categoria (uma transa&ccedil;&atilde;o por linha).&lt;/p&gt;
+  &lt;input type="file" id="arquivo-csv" accept=".csv"&gt;
+&lt;/section&gt;</pre>
+<p>Primeiro, uma <strong>refatora&ccedil;&atilde;o</strong> (reduzir repeti&ccedil;&atilde;o): extraímos a l&oacute;gica comum para fun&ccedil;&otilde;es reutiliz&aacute;veis.</p>
+<pre>function registrarTransacao(descricao, valor, tipo, categoria) {
+  if (tipo === "despesa") {
+    saldo = saldo - valor;
+  } else {
+    saldo = saldo + valor;
+  }
+
+  var transacao = { descricao: descricao, valor: valor, tipo: tipo };
+
+  if (categoria) {
+    transacao.categoria = categoria;
+  }
+
+  transacoes.push(transacao);
+}
+
+function atualizarTela() {
+  exibirSaldo();
+  salvarTransacoes();
+  exibirTransacoes();
+  exibirResumo();
+  exibirCategorias();
+}</pre>
+<pre>document.getElementById("arquivo-csv").addEventListener("change", function (evento) {
+  var arquivo = evento.target.files[0];
+
+  if (!arquivo) {
+    return;
+  }
+
+  var leitor = new FileReader();
+
+  leitor.onload = function () {
+    importarCSV(leitor.result);
+  };
+
+  leitor.readAsText(arquivo, "UTF-8");
+});</pre>
+<pre>function importarCSV(texto) {
+  var linhas = texto.split(/\r?\n/);
+  var importadas = 0;
+
+  for (var i = 0; i &lt; linhas.length; i++) {
+    var linha = linhas[i].trim();
+
+    if (linha === "") {
+      continue;
+    }
+
+    var partes = linha.split(",");
+    var descricao = partes[0].trim();
+    var valor = Number(partes[1]);
+    var tipo = (partes[2] || "").trim().toLowerCase();
+    var categoria = (partes[3] || "").trim();
+
+    if (descricao === "" || isNaN(valor) || valor &lt;= 0) {
+      continue;
+    }
+
+    if (tipo !== "receita" &amp;&amp; tipo !== "despesa") {
+      continue;
+    }
+
+    registrarTransacao(descricao, valor, tipo, categoria);
+    importadas = importadas + 1;
+  }
+
+  atualizarTela();
+  alert(importadas + " transa&ccedil;&atilde;o(&otilde;es) importada(s).");
+}</pre>
+<p><strong>Conceitos novos:</strong></p>
+<ul>
+  <li><strong><code>&lt;input type="file"&gt;</code>:</strong> abre a janela para escolher um arquivo; <code>accept=".csv"</code> filtra o tipo; o arquivo fica em <code>evento.target.files[0]</code>.</li>
+  <li><strong><code>FileReader</code>:</strong> l&ecirc; arquivos no navegador. <code>readAsText(arquivo, "UTF-8")</code> l&ecirc; como texto; ao terminar, <code>onload</code> roda e o conte&uacute;do est&aacute; em <code>leitor.result</code> (ass&iacute;ncrono).</li>
+  <li><strong><code>split(/\r?\n/)</code>:</strong> quebra em linhas; <code>/\r?\n/</code> &eacute; uma <strong>express&atilde;o regular</strong> que aceita quebras do Windows e do Linux.</li>
+  <li><strong><code>.trim()</code>:</strong> remove espa&ccedil;os das pontas de um texto.</li>
+  <li><strong><code>isNaN(valor)</code>:</strong> &ldquo;n&atilde;o &eacute; n&uacute;mero&rdquo;; usamos para descartar linhas inv&aacute;lidas (e o cabe&ccedil;alho).</li>
+  <li><strong><code>continue;</code>:</strong> pula para a pr&oacute;xima volta do la&ccedil;o na hora (diferente do <code>return</code>, que sai da fun&ccedil;&atilde;o).</li>
+  <li><strong><code>(partes[2] || "")</code>:</strong> evita erro quando a c&eacute;lula n&atilde;o existe.</li>
+  <li><strong>Refatora&ccedil;&atilde;o / DRY:</strong> <code>registrarTransacao</code> e <code>atualizarTela</code> centralizam a l&oacute;gica; digitar e importar usam o mesmo caminho.</li>
+</ul>
+<p><strong>Teste:</strong> h&aacute; um arquivo <code>exemplo-extrato.csv</code> na pasta do projeto &mdash; escolha-o na tela de importa&ccedil;&atilde;o.</p>
+<p><strong>Li&ccedil;&atilde;o:</strong> todo dado que vem de fora precisa ser <strong>validado</strong>; linhas erradas s&atilde;o ignoradas sem quebrar o app.</p>
+
 <h2 class="pagebreak">GITHUB &mdash; SUBINDO O PROJETO PARA A NUVEM</h2>
 <p><strong>Git</strong> = a "m&aacute;quina do tempo" (registra vers&otilde;es, d&aacute; para voltar no tempo). <strong>GitHub</strong> = servi&ccedil;o gr&aacute;tis que guarda o reposit&oacute;rio na nuvem (backup + compartilhamento).</p>
 <p><strong>Passos feitos:</strong></p>
@@ -471,6 +571,14 @@ item.className = despesa ? "despesa" : "receita";</pre>
   <tr><td>Objeto como dicion&aacute;rio</td><td>Usa o valor da vari&aacute;vel como chave</td><td>totais[categoria]</td></tr>
   <tr><td>Fun&ccedil;&atilde;o auxiliar (DRY)</td><td>Reaproveita l&oacute;gica, evita repeti&ccedil;&atilde;o</td><td>formatarDinheiro / ehDespesa</td></tr>
   <tr><td>if / else</td><td>"se ... sen&atilde;o ..."</td><td>item com ou sem categoria</td></tr>
+  <tr><td>input file</td><td>Escolher arquivo do computador</td><td>importar CSV</td></tr>
+  <tr><td>FileReader</td><td>L&ecirc; arquivos no navegador (ass&iacute;ncrono)</td><td>readAsText + onload</td></tr>
+  <tr><td>split()</td><td>Quebra um texto em partes</td><td>quebrar CSV em linhas/c&eacute;lulas</td></tr>
+  <tr><td>trim()</td><td>Remove espa&ccedil;os das pontas</td><td>limpar c&eacute;lulas</td></tr>
+  <tr><td>isNaN()</td><td>Diz se o valor "n&atilde;o &eacute; n&uacute;mero"</td><td>descartar linha inv&aacute;lida</td></tr>
+  <tr><td>continue</td><td>Pula para a pr&oacute;xima volta do la&ccedil;o</td><td>ignorar linha errada</td></tr>
+  <tr><td>Express&atilde;o regular</td><td>Padr&atilde;o de busca em texto</td><td>/\r?\n/ (quebras de linha)</td></tr>
+  <tr><td>Refatora&ccedil;&atilde;o</td><td>Reorganizar sem mudar o resultado</td><td>registrarTransacao / atualizarTela</td></tr>
 </table>
 
 <h1>PR&Oacute;XIMOS PASSOS</h1>
@@ -489,7 +597,12 @@ item.className = despesa ? "despesa" : "receita";</pre>
       <li>[x] Microetapa 3: gastos por categoria.</li>
     </ul>
   </li>
-  <li>Fase 5 (pr&oacute;xima): Aperfei&ccedil;oamentos e diferenciais &mdash; visual refinado, metas, importa&ccedil;&atilde;o de extrato CSV ou Open Finance simulado.</li>
+  <li>Fase 5 &mdash; Aperfei&ccedil;oamentos e diferenciais &#128679; em andamento.
+    <ul>
+      <li>[x] Microetapa 1: importa&ccedil;&atilde;o de extrato em CSV.</li>
+      <li>[ ] Pr&oacute;ximas: metas de gasto por categoria, visual refinado, Open Finance simulado.</li>
+    </ul>
+  </li>
 </ul>
 
 </body>

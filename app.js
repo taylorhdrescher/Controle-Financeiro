@@ -82,6 +82,63 @@ function exibirTransacoes() {
   }
 }
 
+function registrarTransacao(descricao, valor, tipo, categoria) {
+  if (tipo === "despesa") {
+    saldo = saldo - valor;
+  } else {
+    saldo = saldo + valor;
+  }
+
+  var transacao = { descricao: descricao, valor: valor, tipo: tipo };
+
+  if (categoria) {
+    transacao.categoria = categoria;
+  }
+
+  transacoes.push(transacao);
+}
+
+function atualizarTela() {
+  exibirSaldo();
+  salvarTransacoes();
+  exibirTransacoes();
+  exibirResumo();
+  exibirCategorias();
+}
+
+function importarCSV(texto) {
+  var linhas = texto.split(/\r?\n/);
+  var importadas = 0;
+
+  for (var i = 0; i < linhas.length; i++) {
+    var linha = linhas[i].trim();
+
+    if (linha === "") {
+      continue;
+    }
+
+    var partes = linha.split(",");
+    var descricao = partes[0].trim();
+    var valor = Number(partes[1]);
+    var tipo = (partes[2] || "").trim().toLowerCase();
+    var categoria = (partes[3] || "").trim();
+
+    if (descricao === "" || isNaN(valor) || valor <= 0) {
+      continue;
+    }
+
+    if (tipo !== "receita" && tipo !== "despesa") {
+      continue;
+    }
+
+    registrarTransacao(descricao, valor, tipo, categoria);
+    importadas = importadas + 1;
+  }
+
+  atualizarTela();
+  alert(importadas + " transação(ões) importada(s).");
+}
+
 document.getElementById("form-receita").addEventListener("submit", function (evento) {
   evento.preventDefault();
 
@@ -93,14 +150,8 @@ document.getElementById("form-receita").addEventListener("submit", function (eve
     return;
   }
 
-  saldo = saldo + valor;
-  transacoes.push({ descricao: descricao, valor: valor, tipo: "receita" });
-
-  exibirSaldo();
-  salvarTransacoes();
-  exibirTransacoes();
-  exibirResumo();
-  exibirCategorias();
+  registrarTransacao(descricao, valor, "receita");
+  atualizarTela();
 });
 
 document.getElementById("form-despesa").addEventListener("submit", function (evento) {
@@ -115,17 +166,24 @@ document.getElementById("form-despesa").addEventListener("submit", function (eve
     return;
   }
 
-  saldo = saldo - valor;
-  transacoes.push({ descricao: descricao, valor: valor, categoria: categoria, tipo: "despesa" });
-
-  exibirSaldo();
-  salvarTransacoes();
-  exibirTransacoes();
-  exibirResumo();
-  exibirCategorias();
+  registrarTransacao(descricao, valor, "despesa", categoria);
+  atualizarTela();
 });
 
-exibirSaldo();
-exibirTransacoes();
-exibirResumo();
-exibirCategorias();
+document.getElementById("arquivo-csv").addEventListener("change", function (evento) {
+  var arquivo = evento.target.files[0];
+
+  if (!arquivo) {
+    return;
+  }
+
+  var leitor = new FileReader();
+
+  leitor.onload = function () {
+    importarCSV(leitor.result);
+  };
+
+  leitor.readAsText(arquivo, "UTF-8");
+});
+
+atualizarTela();

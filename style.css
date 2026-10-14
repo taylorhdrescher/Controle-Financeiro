@@ -82,6 +82,11 @@ li {
   margin-bottom: 8px;
 }
 
+.dica {
+  color: #9ca3af;
+  font-size: 0.9em;
+}
+
 .receita {
   color: #22c55e;
   font-weight: bold;

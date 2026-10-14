@@ -34,9 +34,11 @@
    - Microetapa 1: Tipo da transação e cores no extrato (verde/vermelho)
    - Microetapa 2: A seção Resumo (total de receitas e despesas)
    - Microetapa 3: Gastos por categoria
-5. GitHub: subindo o projeto para a nuvem
-6. Conceitos aprendidos até aqui (glossário)
-7. Próximos passos
+5. Fase 5 — Aperfeiçoamentos e diferenciais
+   - Microetapa 1: Importação de extrato em CSV
+6. GitHub: subindo o projeto para a nuvem
+7. Conceitos aprendidos até aqui (glossário)
+8. Próximos passos
 
 ---
 
@@ -569,6 +571,139 @@ function exibirCategorias() {
 
 ---
 
+# FASE 5 — APERFEIÇOAMENTOS E DIFERENCIAIS
+
+## Microetapa 1 — Importação de extrato em CSV
+
+**Objetivo:** em vez de digitar transação por transação, o usuário escolhe um arquivo `.csv` (planilha em texto) e o app lança todas de uma vez. É o "diferencial" do projeto.
+
+**Por que CSV:** é um formato simples e universal (abre no Excel, Google Planilhas e bloco de notas). Serve como uma alternativa didática ao Open Finance (que exigiria banco e certificados).
+
+**Formato adotado** (uma transação por linha):
+
+```
+descricao,valor,tipo,categoria
+Salario,3000,receita,
+Mercado,450.75,despesa,Alimentação
+Aluguel,1200,despesa,Moradia
+```
+
+- Colunas separadas por **vírgula**; decimal com **ponto** (padrão do CSV).
+- `tipo` deve ser `receita` ou `despesa`; `categoria` só para despesas (pode ficar vazia).
+- A primeira linha é o **cabeçalho** (nomes das colunas) — o app a ignora sozinho.
+
+HTML (nova seção):
+
+```html
+<section>
+  <h2>Importar extrato (CSV)</h2>
+  <p class="dica">Formato: descricao,valor,tipo,categoria (uma transação por linha).</p>
+  <input type="file" id="arquivo-csv" accept=".csv">
+</section>
+```
+
+Primeiro, uma **refatoração** (reduzir repetição): as duas telas já faziam a mesma coisa — atualizar saldo, guardar e redesenhar. Extraímos isso para funções reutilizáveis:
+
+```js
+function registrarTransacao(descricao, valor, tipo, categoria) {
+  if (tipo === "despesa") {
+    saldo = saldo - valor;
+  } else {
+    saldo = saldo + valor;
+  }
+
+  var transacao = { descricao: descricao, valor: valor, tipo: tipo };
+
+  if (categoria) {
+    transacao.categoria = categoria;
+  }
+
+  transacoes.push(transacao);
+}
+
+function atualizarTela() {
+  exibirSaldo();
+  salvarTransacoes();
+  exibirTransacoes();
+  exibirResumo();
+  exibirCategorias();
+}
+```
+
+Assim, os formulários e a importação usam **a mesma lógica** (fonte única, menos bugs). A leitura do arquivo:
+
+```js
+document.getElementById("arquivo-csv").addEventListener("change", function (evento) {
+  var arquivo = evento.target.files[0];
+
+  if (!arquivo) {
+    return;
+  }
+
+  var leitor = new FileReader();
+
+  leitor.onload = function () {
+    importarCSV(leitor.result);
+  };
+
+  leitor.readAsText(arquivo, "UTF-8");
+});
+```
+
+E a função que interpreta o texto do CSV:
+
+```js
+function importarCSV(texto) {
+  var linhas = texto.split(/\r?\n/);
+  var importadas = 0;
+
+  for (var i = 0; i < linhas.length; i++) {
+    var linha = linhas[i].trim();
+
+    if (linha === "") {
+      continue;
+    }
+
+    var partes = linha.split(",");
+    var descricao = partes[0].trim();
+    var valor = Number(partes[1]);
+    var tipo = (partes[2] || "").trim().toLowerCase();
+    var categoria = (partes[3] || "").trim();
+
+    if (descricao === "" || isNaN(valor) || valor <= 0) {
+      continue;
+    }
+
+    if (tipo !== "receita" && tipo !== "despesa") {
+      continue;
+    }
+
+    registrarTransacao(descricao, valor, tipo, categoria);
+    importadas = importadas + 1;
+  }
+
+  atualizarTela();
+  alert(importadas + " transação(ões) importada(s).");
+}
+```
+
+**Conceitos novos:**
+- **`<input type="file">`** → abre a janela do computador para escolher um arquivo. `accept=".csv"` filtra por tipo. O arquivo escolhido fica em `evento.target.files[0]`.
+- **`FileReader`** → objeto do navegador que **lê arquivos**. `readAsText(arquivo, "UTF-8")` lê como texto; quando termina (`onload`), o conteúdo está em `leitor.result`. É assíncrono: os dados só chegam depois, dentro do `onload`.
+- **`split(/\r?\n/)`** → quebra o texto em linhas. O `/\r?\n/` é uma **expressão regular** que aceita tanto `\n` (Linux) quanto `\r\n` (Windows).
+- **`.trim()`** → remove espaços em branco e o "enter" do começo/fim de um texto (evita linhas e células "sujas").
+- **`isNaN(valor)`** → "is Not a Number" (não é número). `Number("abc")` vira `NaN`; usamos isso para **descartar linhas inválidas** (inclusive o cabeçalho, pois a coluna valor tem a palavra "valor").
+- **`continue;`** → pula para a próxima volta do laço **na hora**, sem executar o resto do bloco. Diferente do `return` (que sai da função toda), aqui pulamos só a linha inválida e continuamos importando.
+- **`(partes[2] || "")`** → se a célula não existir (linha curta), usamos texto vazio para evitar erro.
+- **`.toLowerCase()`** → deixa o texto minúsculo, para aceitar `Receita`, `RECEITA` ou `receita`.
+- **Refatoração / DRY:** `registrarTransacao` e `atualizarTela` centralizam a lógica. Digitar e importar passam pelo mesmo caminho.
+
+**Teste:** há um arquivo `exemplo-extrato.csv` na pasta do projeto — escolha-o na tela de importação e veja o saldo, o resumo e as categorias atualizarem de uma vez.
+
+**Lição:** todo dado que vem de fora (arquivo, digitado, da internet) é "suspeito" e precisa ser **validado**. Linhas erradas são simplesmente ignoradas, sem quebrar o app.
+
+---
+
 ## GITHUB — subindo o projeto para a nuvem
 
 **O que é:** **Git** = a "máquina do tempo" do projeto (registra versões dos arquivos, dá para voltar no tempo). **GitHub** = serviço grátis que guarda o repositório na nuvem (backup + compartilhamento com o professor).
@@ -650,6 +785,14 @@ exibirSaldo();
 | Objeto como dicionário | Usa o valor da variável como chave | `totais[categoria]` |
 | Função auxiliar (DRY) | Reaproveita lógica, evita repetição | `formatarDinheiro` / `ehDespesa` |
 | if / else | "se ... senão ..." | item com ou sem categoria |
+| input file | Escolher arquivo do computador | importar CSV |
+| FileReader | Lê arquivos no navegador (assíncrono) | `readAsText` + `onload` |
+| split() | Quebra um texto em partes | quebrar CSV em linhas/células |
+| trim() | Remove espaços das pontas | limpar células da planilha |
+| isNaN() | Diz se o valor "não é número" | descartar linha inválida |
+| continue | Pula para a próxima volta do laço | ignorar linha errada |
+| Expressão regular | Padrão de busca em texto | `/\r?\n/` (quebras de linha) |
+| Refatoração | Reorganizar sem mudar o resultado | `registrarTransacao` / `atualizarTela` |
 
 ---
 
@@ -662,5 +805,6 @@ exibirSaldo();
   - [x] Microetapa 1: tipo da transação e cores no extrato.
   - [x] Microetapa 2: seção Resumo (receitas e despesas).
   - [x] Microetapa 3: gastos por categoria.
-- Fase 5 (próxima): Aperfeiçoamentos e diferenciais.
-  - Visual refinado, metas, importação de extrato CSV ou Open Finance simulado.
+- Fase 5 — Aperfeiçoamentos e diferenciais 🚧 em andamento.
+  - [x] Microetapa 1: importação de extrato em CSV.
+  - [ ] Próximas: metas de gasto por categoria, visual refinado, Open Finance simulado.
