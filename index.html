@@ -17,6 +17,12 @@
     </section>
 
     <section>
+      <h2>Resumo</h2>
+      <p>Receitas: <span id="total-receitas" class="receita"></span></p>
+      <p>Despesas: <span id="total-despesas" class="despesa"></span></p>
+    </section>
+
+    <section>
       <h2>Adicionar receita</h2>
       <form id="form-receita">
         <label for="descricao">Descrição</label>
@@ -32,10 +38,24 @@
       <form id="form-despesa">
         <label for="descricao-despesa">Descrição</label>
         <input type="text" id="descricao-despesa" placeholder="Ex: Aluguel">
+        <label for="categoria-despesa">Categoria</label>
+        <select id="categoria-despesa">
+          <option>Moradia</option>
+          <option>Alimentação</option>
+          <option>Transporte</option>
+          <option>Lazer</option>
+          <option>Saúde</option>
+          <option>Outros</option>
+        </select>
         <label for="valor-despesa">Valor (R$)</label>
         <input type="number" id="valor-despesa" step="0.01" min="0">
         <button type="submit">Adicionar</button>
       </form>
+    </section>
+
+    <section>
+      <h2>Gastos por categoria</h2>
+      <ul id="lista-categorias"></ul>
     </section>
 
     <section>

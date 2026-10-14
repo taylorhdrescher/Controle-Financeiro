@@ -39,12 +39,12 @@ controle-financeiro/
 ## Plano geral (fases)
 1. Fase 1 — Estrutura e interface básica ✅ concluída (4 microetapas)
 2. Fase 2 — Cadastro de transações ✅ concluída (6 microetapas)
-3. Fase 3 — Categorias e organização
-4. Fase 4 — Resumo e saldo total (verde/vermelho nos valores)
+3. Fase 3 — Categorias e organização ✅ concluída (3 microetapas)
+4. Fase 4 — Resumo e total por categoria ✅ concluída (3 microetapas)
 5. Fase 5 — Aperfeiçoamentos (visual refinado, metas, diferenciais como importação CSV / Open Finance simulado)
 
 ## Fase atual
-Fase 3 — Categorias e organização (próxima a começar)
+Fase 5 — Aperfeiçoamentos (próxima a começar)
 
 ## Microetapas concluídas
 - Fase 1 — Estrutura e interface básica
@@ -63,6 +63,10 @@ Fase 3 — Categorias e organização (próxima a começar)
   - [x] Microetapa 1: Criar o seletor de categorias no formulário de despesa (HTML + CSS)
   - [x] Microetapa 2: Salvar a categoria em cada transação (no objeto) e no localStorage
   - [x] Microetapa 3: Mostrar a categoria no extrato
+- Fase 4 — Resumo e total por categoria
+  - [x] Microetapa 1: Marcar o tipo (receita/despesa) na transação e colorir o extrato (verde/vermelho)
+  - [x] Microetapa 2: Seção Resumo com total de receitas e de despesas
+  - [x] Microetapa 3: Gastos por categoria (somar os valores de cada categoria)
 
 ## Conceitos já ensinados
 - Arquivo, extensão (.html, .css, .js) e função de cada arquivo.
@@ -81,6 +85,12 @@ Fase 3 — Categorias e organização (próxima a começar)
 - JSON: stringify (texto) e parse (lista) — ponte com a gaveta.
 - Validação de entrada: if, alert(), return.
 - Git/GitHub: init, config, add, commit, branch main, remote, push.
+- Campo `tipo` no objeto da transação (receita/despesa) para colorir valores.
+- CSS: classes (.receita/.despesa) e cores verde (#22c55e) / vermelho (#ef4444).
+- Operador ternário `condição ? a : b` (versão curta do if/else).
+- Função auxiliar (formatarDinheiro) para evitar repetição de código (DRY).
+- Objeto usado como "dicionário" (totais[categoria]) e laço `for...in`.
+- Acumulador (somar valores em um laço) para montar o resumo e os totais por categoria.
 
 ## Problemas pendentes
 Nenhum.
@@ -90,7 +100,7 @@ Nenhum.
 - Bug: transação sem valor era adicionada ao extrato. Causa: `Number("")` vira 0 e não havia checagem. Correção: validação `if (valor <= 0)` com `alert` e `return` nos dois formulários.
 
 ## Próxima microetapa
-Fase 3 concluída. Próxima: Fase 4 — Resumo e saldo total (verde/vermelho nos valores).
+Fase 4 concluída. Próxima: Fase 5 — Aperfeiçoamentos (visual refinado, metas, diferenciais como importação CSV / Open Finance simulado).
 
 ## Observações
 - Todo o conteúdo didático (explicações de cada microetapa, bugs corrigidos e GitHub) está salvo de forma permanente em **TUTORIAL.md** e regenerado em **TUTORIAL.pdf**.

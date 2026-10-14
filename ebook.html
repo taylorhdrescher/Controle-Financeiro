@@ -45,6 +45,8 @@
   <li>Fase 1 &mdash; Estrutura e interface b&aacute;sica (4 microetapas)</li>
   <li>Fase 2 &mdash; Cadastro de transa&ccedil;&otilde;es (6 microetapas)</li>
   <li>Bugs corrigidos (saldo ap&oacute;s F5 e transa&ccedil;&atilde;o sem valor)</li>
+  <li>Fase 3 &mdash; Categorias e organiza&ccedil;&atilde;o (3 microetapas)</li>
+  <li>Fase 4 &mdash; Resumo e total por categoria (3 microetapas)</li>
   <li>GitHub: subindo o projeto para a nuvem</li>
   <li>Gloss&aacute;rio: conceitos aprendidos</li>
   <li>Pr&oacute;ximos passos</li>
@@ -263,6 +265,155 @@ function exibirTransacoes() {
 <p><strong>Conceitos novos:</strong> <code>if (condi&ccedil;&atilde;o)</code> = o "se" da programa&ccedil;&atilde;o; <code>alert("...")</code> = janelinha de aviso; <code>return;</code> = sai da fun&ccedil;&atilde;o na hora, ignorando o resto (o "ponto de interdi&ccedil;&atilde;o").</p>
 <p><strong>Li&ccedil;&atilde;o:</strong> todo dado que entra precisa ser <strong>validado</strong> antes de ser usado &mdash; base de seguran&ccedil;a em qualquer app.</p>
 
+<h1 class="pagebreak">FASE 3 &mdash; CATEGORIAS E ORGANIZA&Ccedil;&Atilde;O</h1>
+<h2>Microetapa 1 &mdash; O seletor de categorias</h2>
+<p><strong>Objetivo:</strong> adicionar um menu de escolha (dropdown) com categorias no formul&aacute;rio de despesas, para futuramente organizar e resumir os gastos.</p>
+<p><strong>Por que:</strong> sem categoria, o extrato &eacute; s&oacute; uma lista solta. Com ela, poderemos responder "quanto gastei em alimenta&ccedil;&atilde;o?" &mdash; o cora&ccedil;&atilde;o de um controle financeiro.</p>
+<pre>&lt;label for="categoria-despesa"&gt;Categoria&lt;/label&gt;
+&lt;select id="categoria-despesa"&gt;
+  &lt;option&gt;Moradia&lt;/option&gt;
+  &lt;option&gt;Alimenta&ccedil;&atilde;o&lt;/option&gt;
+  &lt;option&gt;Transporte&lt;/option&gt;
+  &lt;option&gt;Lazer&lt;/option&gt;
+  &lt;option&gt;Sa&uacute;de&lt;/option&gt;
+  &lt;option&gt;Outros&lt;/option&gt;
+&lt;/select&gt;</pre>
+<pre>select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #374151;
+  border-radius: 4px;
+  background-color: #111827;
+  color: #f9fafb;
+}</pre>
+<p><strong>Conceitos novos:</strong> <code>&lt;select&gt;</code> = caixa de menu (dropdown), com <code>&lt;label&gt;</code> e <code>id</code> como os outros campos; <code>&lt;option&gt;</code> = cada escolha poss&iacute;vel (o primeiro j&aacute; vem selecionado). O CSS repetiu as regras do <code>input</code> para que os campos fiquem com a mesma apar&ecirc;ncia.</p>
+<p><strong>Importante:</strong> nesta microetapa a categoria aparece na tela, mas <strong>ainda n&atilde;o &eacute; salva</strong> &mdash; isso &eacute; a pr&oacute;xima etapa (o JS precisa ler o valor do <code>&lt;select&gt;</code> e guard&aacute;-lo).</p>
+
+<h2>Microetapa 2 &mdash; Salvar a categoria em cada transa&ccedil;&atilde;o</h2>
+<p><strong>Objetivo:</strong> o JS passar a ler o valor escolhido no menu e guard&aacute;-lo junto com a despesa.</p>
+<pre>var categoria = document.getElementById("categoria-despesa").value;
+transacoes.push({ descricao: descricao, valor: valor, categoria: categoria });</pre>
+<ul>
+  <li><code>document.getElementById("categoria-despesa").value</code> &rarr; lemos o valor escolhido no <code>&lt;select&gt;</code>. Todo campo tem <code>.value</code>: no <code>&lt;input&gt;</code> &eacute; o texto digitado; no <code>&lt;select&gt;</code> &eacute; a <code>&lt;option&gt;</code> selecionada.</li>
+  <li><code>categoria: categoria</code> &rarr; adicionamos um <strong>novo campo</strong> ao objeto da transa&ccedil;&atilde;o (<code>{ descricao, valor }</code> agora tamb&eacute;m tem <code>categoria</code>).</li>
+  <li><strong>N&atilde;o foi preciso mudar como salvamos:</strong> como o objeto ganhou o campo novo, a lista inteira salva com JSON j&aacute; o inclui automaticamente.</li>
+</ul>
+
+<h2>Microetapa 3 &mdash; Mostrar a categoria no extrato</h2>
+<p><strong>Objetivo:</strong> mostrar a categoria s&oacute; quando ela existir (receitas n&atilde;o t&ecirc;m categoria).</p>
+<pre>if (transacao.categoria) {
+  item.textContent = transacao.descricao + " [" + transacao.categoria + "] — R$ " + transacao.valor.toFixed(2).replace(".", ",");
+} else {
+  item.textContent = transacao.descricao + " — R$ " + transacao.valor.toFixed(2).replace(".", ",");
+}</pre>
+<ul>
+  <li><strong><code>if</code> / <code>else</code></strong> &rarr; &ldquo;se ... sen&atilde;o ...&rdquo;: um caminho quando a condi&ccedil;&atilde;o &eacute; verdadeira, outro quando &eacute; falsa.</li>
+  <li><code>if (transacao.categoria)</code> &rarr; al&eacute;m de <code>true</code>/<code>false</code>, o <code>if</code> aceita qualquer valor &ldquo;verdadeiro&rdquo;; se n&atilde;o existir, &eacute; <code>undefined</code> (falso) &rarr; cai no <code>else</code>.</li>
+  <li><strong>Li&ccedil;&atilde;o:</strong> o mesmo tipo de dado pode ter <strong>formatos diferentes</strong>; o c&oacute;digo precisa se adaptar.</li>
+</ul>
+<p>&#127881; Fim da Fase 3: as despesas agora est&atilde;o organizadas por categoria.</p>
+
+<h1 class="pagebreak">FASE 4 &mdash; RESUMO E TOTAL POR CATEGORIA</h1>
+
+<h2>Microetapa 1 &mdash; Tipo da transa&ccedil;&atilde;o e cores no extrato (verde/vermelho)</h2>
+<p><strong>Objetivo:</strong> pintar de <strong>verde</strong> o que entra (receita) e de <strong>vermelho</strong> o que sai (despesa). Para isso, cada transa&ccedil;&atilde;o precisa &ldquo;saber&rdquo; o que ela &eacute;.</p>
+<p>Adicionamos um campo <code>tipo</code> ao objeto da transa&ccedil;&atilde;o:</p>
+<pre>transacoes.push({ descricao: descricao, valor: valor, tipo: "receita" });
+transacoes.push({ descricao: descricao, valor: valor, categoria: categoria, tipo: "despesa" });</pre>
+<pre>function ehDespesa(transacao) {
+  return transacao.tipo === "despesa" || (!transacao.tipo &amp;&amp; transacao.categoria);
+}</pre>
+<pre>var despesa = ehDespesa(transacao);
+var sinal = despesa ? "- " : "+ ";
+item.textContent = transacao.descricao + " — " + sinal + formatarDinheiro(transacao.valor);
+item.className = despesa ? "despesa" : "receita";</pre>
+<pre>.receita {
+  color: #22c55e;
+  font-weight: bold;
+}
+
+.despesa {
+  color: #ef4444;
+  font-weight: bold;
+}</pre>
+<p><strong>Conceitos novos:</strong></p>
+<ul>
+  <li><strong>Campo <code>tipo</code>:</strong> guarda a &ldquo;natureza&rdquo; da transa&ccedil;&atilde;o &mdash; o dado que faltava para colorir e resumir.</li>
+  <li><strong><code>===</code>:</strong> compara valor e tipo (diferente de <code>=</code>, que <em>atribui</em>).</li>
+  <li><strong>Operador tern&aacute;rio <code>condi&ccedil;&atilde;o ? a : b</code>:</strong> vers&atilde;o curta do <code>if/else</code>.</li>
+  <li><strong><code>item.className</code>:</strong> troca a classe CSS do elemento criado, ligando-o a <code>.receita</code> / <code>.despesa</code>.</li>
+  <li><strong>Fun&ccedil;&atilde;o auxiliar (DRY):</strong> pequena fun&ccedil;&atilde;o reaproveitada em v&aacute;rios pontos, para n&atilde;o repetir c&oacute;digo.</li>
+  <li><strong>Retrocompatibilidade:</strong> <code>ehDespesa</code> tamb&eacute;m reconhece despesas antigas (sem o campo <code>tipo</code>), usando a categoria como pista.</li>
+</ul>
+
+<h2>Microetapa 2 &mdash; A se&ccedil;&atilde;o Resumo (total de receitas e despesas)</h2>
+<p><strong>Objetivo:</strong> mostrar separadamente quanto entrou e quanto saiu, al&eacute;m do saldo final.</p>
+<pre>&lt;section&gt;
+  &lt;h2&gt;Resumo&lt;/h2&gt;
+  &lt;p&gt;Receitas: &lt;span id="total-receitas" class="receita"&gt;&lt;/span&gt;&lt;/p&gt;
+  &lt;p&gt;Despesas: &lt;span id="total-despesas" class="despesa"&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;/section&gt;</pre>
+<pre>function exibirResumo() {
+  var totalReceitas = 0;
+  var totalDespesas = 0;
+
+  for (var i = 0; i &lt; transacoes.length; i++) {
+    if (ehDespesa(transacoes[i])) {
+      totalDespesas = totalDespesas + transacoes[i].valor;
+    } else {
+      totalReceitas = totalReceitas + transacoes[i].valor;
+    }
+  }
+
+  document.getElementById("total-receitas").textContent = formatarDinheiro(totalReceitas);
+  document.getElementById("total-despesas").textContent = formatarDinheiro(totalDespesas);
+}</pre>
+<p><strong>Conceitos novos:</strong></p>
+<ul>
+  <li><strong>Acumulador:</strong> vari&aacute;vel que come&ccedil;a em <code>0</code> e recebe soma a cada volta do la&ccedil;o (<code>total = total + valor</code>). &Eacute; assim que se calcula total em qualquer sistema.</li>
+  <li><strong>Cor com significado:</strong> verde/vermelho comunicam r&aacute;pido (entrada x sa&iacute;da).</li>
+</ul>
+
+<h2>Microetapa 3 &mdash; Gastos por categoria</h2>
+<p><strong>Objetivo:</strong> responder &ldquo;quanto gastei em cada categoria?&rdquo;.</p>
+<pre>&lt;section&gt;
+  &lt;h2&gt;Gastos por categoria&lt;/h2&gt;
+  &lt;ul id="lista-categorias"&gt;&lt;/ul&gt;
+&lt;/section&gt;</pre>
+<pre>function exibirCategorias() {
+  var lista = document.getElementById("lista-categorias");
+  lista.textContent = "";
+
+  var totais = {};
+
+  for (var i = 0; i &lt; transacoes.length; i++) {
+    var transacao = transacoes[i];
+
+    if (ehDespesa(transacao)) {
+      var categoria = transacao.categoria;
+
+      if (totais[categoria]) {
+        totais[categoria] = totais[categoria] + transacao.valor;
+      } else {
+        totais[categoria] = transacao.valor;
+      }
+    }
+  }
+
+  for (var categoria in totais) {
+    var item = document.createElement("li");
+    item.textContent = categoria + " — " + formatarDinheiro(totais[categoria]);
+    lista.appendChild(item);
+  }
+}</pre>
+<p><strong>Conceitos novos:</strong></p>
+<ul>
+  <li><strong>Objeto como dicion&aacute;rio:</strong> <code>totais[categoria]</code> usa o <em>valor da vari&aacute;vel</em> como chave.</li>
+  <li><strong>Criar a chave na primeira vez:</strong> se ainda n&atilde;o existe, guarda o primeiro valor; depois, soma (padr&atilde;o &ldquo;inicializa e acumula&rdquo;).</li>
+  <li><strong>La&ccedil;o <code>for...in</code>:</strong> percorre as <strong>chaves</strong> de um objeto (aqui, cada categoria).</li>
+</ul>
+<p>&#127881; Fim da Fase 4: saldo, resumo com cores e gastos por categoria.</p>
+
 <h2 class="pagebreak">GITHUB &mdash; SUBINDO O PROJETO PARA A NUVEM</h2>
 <p><strong>Git</strong> = a "m&aacute;quina do tempo" (registra vers&otilde;es, d&aacute; para voltar no tempo). <strong>GitHub</strong> = servi&ccedil;o gr&aacute;tis que guarda o reposit&oacute;rio na nuvem (backup + compartilhamento).</p>
 <p><strong>Passos feitos:</strong></p>
@@ -310,13 +461,35 @@ function exibirTransacoes() {
   <tr><td>return</td><td>Sai da fun&ccedil;&atilde;o na hora</td><td>interromper envio inv&aacute;lido</td></tr>
   <tr><td>Git / commit</td><td>M&aacute;quina do tempo / vers&atilde;o registrada</td><td>backup do projeto</td></tr>
   <tr><td>GitHub / push</td><td>Nuvem / enviar para a nuvem</td><td>reposit&oacute;rio online</td></tr>
+  <tr><td>select / option</td><td>Menu de escolha (dropdown)</td><td>categoria da despesa</td></tr>
+  <tr><td>Campo tipo</td><td>Natureza da transa&ccedil;&atilde;o (receita/despesa)</td><td>colorir e resumir</td></tr>
+  <tr><td>===</td><td>Compara valor e tipo</td><td>tipo === "despesa"</td></tr>
+  <tr><td>Operador tern&aacute;rio</td><td>Vers&atilde;o curta do if/else</td><td>despesa ? "- " : "+ "</td></tr>
+  <tr><td>className</td><td>Define a classe CSS via JS</td><td>.receita / .despesa</td></tr>
+  <tr><td>Acumulador</td><td>Vari&aacute;vel que soma no la&ccedil;o</td><td>total de receitas</td></tr>
+  <tr><td>for...in</td><td>Percorre as chaves de um objeto</td><td>cada categoria</td></tr>
+  <tr><td>Objeto como dicion&aacute;rio</td><td>Usa o valor da vari&aacute;vel como chave</td><td>totais[categoria]</td></tr>
+  <tr><td>Fun&ccedil;&atilde;o auxiliar (DRY)</td><td>Reaproveita l&oacute;gica, evita repeti&ccedil;&atilde;o</td><td>formatarDinheiro / ehDespesa</td></tr>
+  <tr><td>if / else</td><td>"se ... sen&atilde;o ..."</td><td>item com ou sem categoria</td></tr>
 </table>
 
 <h1>PR&Oacute;XIMOS PASSOS</h1>
 <ul>
-  <li>Fase 3: Categorias (moradia, alimenta&ccedil;&atilde;o, lazer...) &mdash; organizando as despesas.</li>
-  <li>Fase 4: Resumo do m&ecirc;s com cores (verde receita / vermelho despesa).</li>
-  <li>Fase 5: Diferenciais (importa&ccedil;&atilde;o de extrato CSV ou Open Finance simulado).</li>
+  <li>Fase 3 &mdash; Categorias e organiza&ccedil;&atilde;o &#9989; conclu&iacute;da.
+    <ul>
+      <li>[x] Microetapa 1: seletor de categorias no formul&aacute;rio.</li>
+      <li>[x] Microetapa 2: salvar a categoria em cada transa&ccedil;&atilde;o.</li>
+      <li>[x] Microetapa 3: mostrar a categoria no extrato.</li>
+    </ul>
+  </li>
+  <li>Fase 4 &mdash; Resumo e total por categoria &#9989; conclu&iacute;da.
+    <ul>
+      <li>[x] Microetapa 1: tipo da transa&ccedil;&atilde;o e cores no extrato.</li>
+      <li>[x] Microetapa 2: se&ccedil;&atilde;o Resumo (receitas e despesas).</li>
+      <li>[x] Microetapa 3: gastos por categoria.</li>
+    </ul>
+  </li>
+  <li>Fase 5 (pr&oacute;xima): Aperfei&ccedil;oamentos e diferenciais &mdash; visual refinado, metas, importa&ccedil;&atilde;o de extrato CSV ou Open Finance simulado.</li>
 </ul>
 
 </body>
