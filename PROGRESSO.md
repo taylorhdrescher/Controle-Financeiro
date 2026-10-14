@@ -62,6 +62,7 @@ Fase 3 — Categorias e organização (próxima a começar)
 - Fase 3 — Categorias e organização
   - [x] Microetapa 1: Criar o seletor de categorias no formulário de despesa (HTML + CSS)
   - [x] Microetapa 2: Salvar a categoria em cada transação (no objeto) e no localStorage
+  - [x] Microetapa 3: Mostrar a categoria no extrato
 
 ## Conceitos já ensinados
 - Arquivo, extensão (.html, .css, .js) e função de cada arquivo.
@@ -89,7 +90,7 @@ Nenhum.
 - Bug: transação sem valor era adicionada ao extrato. Causa: `Number("")` vira 0 e não havia checagem. Correção: validação `if (valor <= 0)` com `alert` e `return` nos dois formulários.
 
 ## Próxima microetapa
-Fase 3 — Microetapa 3: mostrar a categoria no extrato.
+Fase 3 concluída. Próxima: Fase 4 — Resumo e saldo total (verde/vermelho nos valores).
 
 ## Observações
 - Todo o conteúdo didático (explicações de cada microetapa, bugs corrigidos e GitHub) está salvo de forma permanente em **TUTORIAL.md** e regenerado em **TUTORIAL.pdf**.
