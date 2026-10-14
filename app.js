@@ -186,4 +186,51 @@ document.getElementById("arquivo-csv").addEventListener("change", function (even
   leitor.readAsText(arquivo, "UTF-8");
 });
 
+var contasOpenFinance = {
+  "Banco Aurora": [
+    { descricao: "Pix recebido", valor: 250, tipo: "receita" },
+    { descricao: "Supermercado", valor: 320.5, tipo: "despesa", categoria: "Alimentação" },
+    { descricao: "Posto de gasolina", valor: 180, tipo: "despesa", categoria: "Transporte" }
+  ],
+  "Banco Laranja": [
+    { descricao: "Salário", valor: 2800, tipo: "receita" },
+    { descricao: "Conta de luz", valor: 145.9, tipo: "despesa", categoria: "Moradia" },
+    { descricao: "Farmácia", valor: 62.4, tipo: "despesa", categoria: "Saúde" },
+    { descricao: "Streaming", valor: 39.9, tipo: "despesa", categoria: "Lazer" }
+  ],
+  "Fintech Pingo": [
+    { descricao: "Transferência recebida", valor: 500, tipo: "receita" },
+    { descricao: "Restaurante", valor: 88.6, tipo: "despesa", categoria: "Alimentação" },
+    { descricao: "Aplicativo de transporte", valor: 27.5, tipo: "despesa", categoria: "Transporte" }
+  ]
+};
+
+document.getElementById("btn-openfinance").addEventListener("click", function () {
+  var banco = document.getElementById("banco-openfinance").value;
+  var consentimento = document.getElementById("consentimento-openfinance").checked;
+  var status = document.getElementById("status-openfinance");
+  var botao = document.getElementById("btn-openfinance");
+
+  if (!consentimento) {
+    alert("Marque a autorização para compartilhar os dados (simulado).");
+    return;
+  }
+
+  botao.disabled = true;
+  status.textContent = "Conectando ao " + banco + "...";
+
+  setTimeout(function () {
+    var movimentacoes = contasOpenFinance[banco];
+
+    for (var i = 0; i < movimentacoes.length; i++) {
+      var movimentacao = movimentacoes[i];
+      registrarTransacao(movimentacao.descricao, movimentacao.valor, movimentacao.tipo, movimentacao.categoria);
+    }
+
+    atualizarTela();
+    status.textContent = movimentacoes.length + " transação(ões) sincronizada(s) do " + banco + ".";
+    botao.disabled = false;
+  }, 1500);
+});
+
 atualizarTela();

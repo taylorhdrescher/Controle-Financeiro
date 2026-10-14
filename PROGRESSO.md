@@ -45,7 +45,7 @@ controle-financeiro/
 5. Fase 5 — Aperfeiçoamentos e diferenciais 🚧 em andamento (importação CSV; depois: metas, visual refinado, Open Finance simulado)
 
 ## Fase atual
-Fase 5 — Aperfeiçoamentos e diferenciais (Microetapa 1 concluída — importação de extrato CSV)
+Fase 5 — Aperfeiçoamentos e diferenciais (Microetapas 1 e 2 concluídas — importação CSV e Open Finance simulado)
 
 ## Microetapas concluídas
 - Fase 1 — Estrutura e interface básica
@@ -70,7 +70,8 @@ Fase 5 — Aperfeiçoamentos e diferenciais (Microetapa 1 concluída — importa
   - [x] Microetapa 3: Gastos por categoria (somar os valores de cada categoria)
 - Fase 5 — Aperfeiçoamentos e diferenciais
   - [x] Microetapa 1: Importação de extrato em CSV (ler arquivo, validar e lançar transações)
-  - [ ] Microetapa 2: (a definir — metas de gasto por categoria / visual refinado / Open Finance simulado)
+  - [x] Microetapa 2: Open Finance simulado (conectar a um banco fictício, consentimento e sincronizar)
+  - [ ] Microetapa 3: (a definir — metas de gasto por categoria / visual refinado)
 
 ## Conceitos já ensinados
 - Arquivo, extensão (.html, .css, .js) e função de cada arquivo.
@@ -99,6 +100,10 @@ Fase 5 — Aperfeiçoamentos e diferenciais (Microetapa 1 concluída — importa
 - FileReader: readAsText (UTF-8), onload e .result (ler arquivo no navegador).
 - Tratamento de texto: split, trim, continue, isNaN, toLowerCase.
 - Refatoração (DRY): funções registrarTransacao e atualizarTela para não repetir código.
+- Simulação: representar algo do mundo real (banco) sem depender dele.
+- setTimeout: agendar código para rodar depois (assíncrono) — sensação de "conectando...".
+- `.checked` (checkbox) e `.disabled` (desabilitar botão enquanto conecta).
+- Objeto cujos valores são listas (dicionário de bancos → movimentações).
 
 ## Problemas pendentes
 Nenhum.
@@ -108,7 +113,7 @@ Nenhum.
 - Bug: transação sem valor era adicionada ao extrato. Causa: `Number("")` vira 0 e não havia checagem. Correção: validação `if (valor <= 0)` com `alert` e `return` nos dois formulários.
 
 ## Próxima microetapa
-Fase 5 — Microetapa 2 (a definir: metas de gasto por categoria OU visual refinado OU Open Finance simulado).
+Fase 5 — Microetapa 3 (a definir: metas de gasto por categoria OU visual refinado).
 
 ## Observações
 - Todo o conteúdo didático (explicações de cada microetapa, bugs corrigidos e GitHub) está salvo de forma permanente em **TUTORIAL.md** e regenerado em **TUTORIAL.pdf**.

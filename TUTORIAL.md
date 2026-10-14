@@ -36,6 +36,7 @@
    - Microetapa 3: Gastos por categoria
 5. Fase 5 — Aperfeiçoamentos e diferenciais
    - Microetapa 1: Importação de extrato em CSV
+   - Microetapa 2: Open Finance simulado
 6. GitHub: subindo o projeto para a nuvem
 7. Conceitos aprendidos até aqui (glossário)
 8. Próximos passos
@@ -704,6 +705,98 @@ function importarCSV(texto) {
 
 ---
 
+## Microetapa 2 — Open Finance simulado
+
+**Objetivo:** simular a conexão com um banco. O usuário escolhe uma instituição, autoriza o compartilhamento e o app "sincroniza" as movimentações.
+
+**Por que "simulado":** o Open Finance **de verdade** exige registro no Banco Central, certificados digitais e regras de LGPD — inviável num projeto de faculdade. Aqui representamos a **ideia** sem usar dados reais: os bancos e as movimentações são fictícios, guardados no próprio código.
+
+**O que é o Open Finance (a ideia):** é um sistema criado pelo Banco Central para que você possa compartilhar seus dados financeiros entre instituições, **com o seu consentimento**. Com ele, um app (como o nosso) consegue ler as movimentações de vários bancos de uma vez.
+
+HTML (nova seção):
+
+```html
+<section>
+  <h2>Open Finance (simulado)</h2>
+  <p class="dica">Conexão fictícia com um banco. Nenhum dado real é usado — é só uma simulação.</p>
+  <label for="banco-openfinance">Instituição</label>
+  <select id="banco-openfinance">
+    <option>Banco Aurora</option>
+    <option>Banco Laranja</option>
+    <option>Fintech Pingo</option>
+  </select>
+  <label class="consentimento">
+    <input type="checkbox" id="consentimento-openfinance">
+    Autorizo o compartilhamento dos meus dados (simulado)
+  </label>
+  <button type="button" id="btn-openfinance">Conectar e importar</button>
+  <p id="status-openfinance"></p>
+</section>
+```
+
+**"Banco de dados" da simulação:** um objeto cujos valores são **listas** de movimentações.
+
+```js
+var contasOpenFinance = {
+  "Banco Aurora": [
+    { descricao: "Pix recebido", valor: 250, tipo: "receita" },
+    { descricao: "Supermercado", valor: 320.5, tipo: "despesa", categoria: "Alimentação" },
+    { descricao: "Posto de gasolina", valor: 180, tipo: "despesa", categoria: "Transporte" }
+  ],
+  "Banco Laranja": [ /* ... */ ],
+  "Fintech Pingo": [ /* ... */ ]
+};
+```
+
+A ação do botão:
+
+```js
+document.getElementById("btn-openfinance").addEventListener("click", function () {
+  var banco = document.getElementById("banco-openfinance").value;
+  var consentimento = document.getElementById("consentimento-openfinance").checked;
+  var status = document.getElementById("status-openfinance");
+  var botao = document.getElementById("btn-openfinance");
+
+  if (!consentimento) {
+    alert("Marque a autorização para compartilhar os dados (simulado).");
+    return;
+  }
+
+  botao.disabled = true;
+  status.textContent = "Conectando ao " + banco + "...";
+
+  setTimeout(function () {
+    var movimentacoes = contasOpenFinance[banco];
+
+    for (var i = 0; i < movimentacoes.length; i++) {
+      var movimentacao = movimentacoes[i];
+      registrarTransacao(movimentacao.descricao, movimentacao.valor, movimentacao.tipo, movimentacao.categoria);
+    }
+
+    atualizarTela();
+    status.textContent = movimentacoes.length + " transação(ões) sincronizada(s) do " + banco + ".";
+    botao.disabled = false;
+  }, 1500);
+});
+```
+
+**Conceitos novos:**
+- **Simulação (mock):** imitar o comportamento de algo real (um banco) sem depender dele. Muito usado para testar e prototipar com segurança.
+- **Consentimento:** antes de "conectar", o usuário precisa **autorizar**. No Open Finance real isso é obrigatório e está ligado à **LGPD** (lei de proteção de dados).
+- **`.checked`:** lê o estado de um `<input type="checkbox">` — `true` se estiver marcado, `false` se não.
+- **`.disabled`:** desliga o botão enquanto a conexão acontece, para o usuário não clicar duas vezes. É reativado (`false`) no final.
+- **`setTimeout(função, 1500)`:** agenda uma função para rodar **depois de 1500 ms** (1,5 s). É **assíncrono**: o resto do código continua e essa parte roda mais tarde. Usamos para simular o tempo de "conectar ao banco".
+- **Objeto com listas dentro:** `contasOpenFinance[banco]` devolve a lista de movimentações daquele banco. É uma estrutura de dados mais rica (dicionário → lista → objetos).
+- **`button type="button"`:** diz ao navegador que o botão **não** é de enviar formulário (diferente do `type="submit"`).
+
+**A grande sacada:** a sincronização **reaproveita** `registrarTransacao` e `atualizarTela` (criadas na Microetapa 1). Como já tínhamos centralizado a lógica, adicionar um banco novo não exigiu mexer no saldo, no extrato nem no resumo. **É o valor da refatoração aparecendo.**
+
+**Teste:** marque a autorização, escolha um banco e clique em "Conectar e importar". As movimentações entram no extrato e nos totais automaticamente.
+
+**Lição:** em sistemas reais, integrar com terceiros (bancos, APIs) envolve **consentimento, tratamento de erros e tempo de espera**. Aqui vimos a versão simplificada dessa ideia.
+
+---
+
 ## GITHUB — subindo o projeto para a nuvem
 
 **O que é:** **Git** = a "máquina do tempo" do projeto (registra versões dos arquivos, dá para voltar no tempo). **GitHub** = serviço grátis que guarda o repositório na nuvem (backup + compartilhamento com o professor).
@@ -793,6 +886,12 @@ exibirSaldo();
 | continue | Pula para a próxima volta do laço | ignorar linha errada |
 | Expressão regular | Padrão de busca em texto | `/\r?\n/` (quebras de linha) |
 | Refatoração | Reorganizar sem mudar o resultado | `registrarTransacao` / `atualizarTela` |
+| Simulação (mock) | Imitar algo real sem depender dele | bancos fictícios |
+| Consentimento | Autorizar o uso dos dados (LGPD) | checkbox do Open Finance |
+| `.checked` | Estado de um checkbox (true/false) | autorização marcada |
+| `.disabled` | Desliga/liga um botão | botão enquanto conecta |
+| setTimeout | Roda uma função depois de um tempo | simular "conectando..." |
+| type="button" | Botão que não envia formulário | conectar ao banco |
 
 ---
 
@@ -807,4 +906,5 @@ exibirSaldo();
   - [x] Microetapa 3: gastos por categoria.
 - Fase 5 — Aperfeiçoamentos e diferenciais 🚧 em andamento.
   - [x] Microetapa 1: importação de extrato em CSV.
-  - [ ] Próximas: metas de gasto por categoria, visual refinado, Open Finance simulado.
+  - [x] Microetapa 2: Open Finance simulado.
+  - [ ] Próximas: metas de gasto por categoria, visual refinado.

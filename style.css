@@ -87,6 +87,18 @@ li {
   font-size: 0.9em;
 }
 
+input[type="checkbox"] {
+  width: auto;
+}
+
+.consentimento {
+  font-size: 0.9em;
+}
+
+#status-openfinance {
+  color: #9ca3af;
+}
+
 .receita {
   color: #22c55e;
   font-weight: bold;

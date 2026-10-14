@@ -514,6 +514,75 @@ function atualizarTela() {
 <p><strong>Teste:</strong> h&aacute; um arquivo <code>exemplo-extrato.csv</code> na pasta do projeto &mdash; escolha-o na tela de importa&ccedil;&atilde;o.</p>
 <p><strong>Li&ccedil;&atilde;o:</strong> todo dado que vem de fora precisa ser <strong>validado</strong>; linhas erradas s&atilde;o ignoradas sem quebrar o app.</p>
 
+<h2>Microetapa 2 &mdash; Open Finance simulado</h2>
+<p><strong>Objetivo:</strong> simular a conex&atilde;o com um banco &mdash; escolher a institui&ccedil;&atilde;o, autorizar o compartilhamento e &ldquo;sincronizar&rdquo; as movimenta&ccedil;&otilde;es.</p>
+<p><strong>Por que "simulado":</strong> o Open Finance de verdade exige registro no Banco Central, certificados e regras de LGPD. Aqui representamos a <strong>ideia</strong> com bancos e movimenta&ccedil;&otilde;es fict&iacute;cios, guardados no pr&oacute;prio c&oacute;digo. O Open Finance real &eacute; o sistema do Banco Central que permite compartilhar seus dados entre institui&ccedil;&otilde;es <strong>com o seu consentimento</strong>.</p>
+<pre>&lt;section&gt;
+  &lt;h2&gt;Open Finance (simulado)&lt;/h2&gt;
+  &lt;p class="dica"&gt;Conex&atilde;o fict&iacute;cia com um banco. Nenhum dado real &eacute; usado.&lt;/p&gt;
+  &lt;label for="banco-openfinance"&gt;Institui&ccedil;&atilde;o&lt;/label&gt;
+  &lt;select id="banco-openfinance"&gt;
+    &lt;option&gt;Banco Aurora&lt;/option&gt;
+    &lt;option&gt;Banco Laranja&lt;/option&gt;
+    &lt;option&gt;Fintech Pingo&lt;/option&gt;
+  &lt;/select&gt;
+  &lt;label class="consentimento"&gt;
+    &lt;input type="checkbox" id="consentimento-openfinance"&gt;
+    Autorizo o compartilhamento dos meus dados (simulado)
+  &lt;/label&gt;
+  &lt;button type="button" id="btn-openfinance"&gt;Conectar e importar&lt;/button&gt;
+  &lt;p id="status-openfinance"&gt;&lt;/p&gt;
+&lt;/section&gt;</pre>
+<p><strong>"Banco de dados" da simula&ccedil;&atilde;o:</strong> um objeto cujos valores s&atilde;o <strong>listas</strong> de movimenta&ccedil;&otilde;es.</p>
+<pre>var contasOpenFinance = {
+  "Banco Aurora": [
+    { descricao: "Pix recebido", valor: 250, tipo: "receita" },
+    { descricao: "Supermercado", valor: 320.5, tipo: "despesa", categoria: "Alimentação" },
+    { descricao: "Posto de gasolina", valor: 180, tipo: "despesa", categoria: "Transporte" }
+  ],
+  "Banco Laranja": [ /* ... */ ],
+  "Fintech Pingo": [ /* ... */ ]
+};</pre>
+<pre>document.getElementById("btn-openfinance").addEventListener("click", function () {
+  var banco = document.getElementById("banco-openfinance").value;
+  var consentimento = document.getElementById("consentimento-openfinance").checked;
+  var status = document.getElementById("status-openfinance");
+  var botao = document.getElementById("btn-openfinance");
+
+  if (!consentimento) {
+    alert("Marque a autorização para compartilhar os dados (simulado).");
+    return;
+  }
+
+  botao.disabled = true;
+  status.textContent = "Conectando ao " + banco + "...";
+
+  setTimeout(function () {
+    var movimentacoes = contasOpenFinance[banco];
+
+    for (var i = 0; i &lt; movimentacoes.length; i++) {
+      var movimentacao = movimentacoes[i];
+      registrarTransacao(movimentacao.descricao, movimentacao.valor, movimentacao.tipo, movimentacao.categoria);
+    }
+
+    atualizarTela();
+    status.textContent = movimentacoes.length + " transa&ccedil;&atilde;o(&otilde;es) sincronizada(s) do " + banco + ".";
+    botao.disabled = false;
+  }, 1500);
+});</pre>
+<p><strong>Conceitos novos:</strong></p>
+<ul>
+  <li><strong>Simula&ccedil;&atilde;o (mock):</strong> imitar algo real (um banco) sem depender dele &mdash; muito usado para testar e prototipar.</li>
+  <li><strong>Consentimento:</strong> o usu&aacute;rio precisa autorizar; no Open Finance real isso &eacute; obrigat&oacute;rio (LGPD).</li>
+  <li><strong><code>.checked</code>:</strong> estado de um <code>&lt;input type="checkbox"&gt;</code> (<code>true</code>/<code>false</code>).</li>
+  <li><strong><code>.disabled</code>:</strong> desliga o bot&atilde;o enquanto conecta (evita clique duplo).</li>
+  <li><strong><code>setTimeout(fun&ccedil;&atilde;o, 1500)</code>:</strong> roda a fun&ccedil;&atilde;o depois de 1,5 s (<strong>ass&iacute;ncrono</strong>) &mdash; simula o tempo de conex&atilde;o.</li>
+  <li><strong>Objeto com listas dentro:</strong> <code>contasOpenFinance[banco]</code> devolve a lista de movimenta&ccedil;&otilde;es daquele banco.</li>
+  <li><strong><code>button type="button"</code>:</strong> bot&atilde;o que n&atilde;o envia formul&aacute;rio.</li>
+</ul>
+<p><strong>A grande sacada:</strong> a sincroniza&ccedil;&atilde;o <strong>reaproveita</strong> <code>registrarTransacao</code> e <code>atualizarTela</code> (Microetapa 1). Como a l&oacute;gica j&aacute; estava centralizada, adicionar um banco novo n&atilde;o exigiu mexer no saldo, no extrato nem no resumo &mdash; <strong>o valor da refatora&ccedil;&atilde;o aparecendo</strong>.</p>
+<p><strong>Li&ccedil;&atilde;o:</strong> em sistemas reais, integrar com terceiros envolve consentimento, tratamento de erros e tempo de espera.</p>
+
 <h2 class="pagebreak">GITHUB &mdash; SUBINDO O PROJETO PARA A NUVEM</h2>
 <p><strong>Git</strong> = a "m&aacute;quina do tempo" (registra vers&otilde;es, d&aacute; para voltar no tempo). <strong>GitHub</strong> = servi&ccedil;o gr&aacute;tis que guarda o reposit&oacute;rio na nuvem (backup + compartilhamento).</p>
 <p><strong>Passos feitos:</strong></p>
@@ -579,6 +648,12 @@ function atualizarTela() {
   <tr><td>continue</td><td>Pula para a pr&oacute;xima volta do la&ccedil;o</td><td>ignorar linha errada</td></tr>
   <tr><td>Express&atilde;o regular</td><td>Padr&atilde;o de busca em texto</td><td>/\r?\n/ (quebras de linha)</td></tr>
   <tr><td>Refatora&ccedil;&atilde;o</td><td>Reorganizar sem mudar o resultado</td><td>registrarTransacao / atualizarTela</td></tr>
+  <tr><td>Simula&ccedil;&atilde;o (mock)</td><td>Imitar algo real sem depender dele</td><td>bancos fict&iacute;cios</td></tr>
+  <tr><td>Consentimento</td><td>Autorizar o uso dos dados (LGPD)</td><td>checkbox do Open Finance</td></tr>
+  <tr><td>.checked</td><td>Estado de um checkbox (true/false)</td><td>autoriza&ccedil;&atilde;o marcada</td></tr>
+  <tr><td>.disabled</td><td>Desliga/liga um bot&atilde;o</td><td>bot&atilde;o enquanto conecta</td></tr>
+  <tr><td>setTimeout</td><td>Roda uma fun&ccedil;&atilde;o depois de um tempo</td><td>simular "conectando..."</td></tr>
+  <tr><td>type="button"</td><td>Bot&atilde;o que n&atilde;o envia formul&aacute;rio</td><td>conectar ao banco</td></tr>
 </table>
 
 <h1>PR&Oacute;XIMOS PASSOS</h1>
@@ -600,7 +675,8 @@ function atualizarTela() {
   <li>Fase 5 &mdash; Aperfei&ccedil;oamentos e diferenciais &#128679; em andamento.
     <ul>
       <li>[x] Microetapa 1: importa&ccedil;&atilde;o de extrato em CSV.</li>
-      <li>[ ] Pr&oacute;ximas: metas de gasto por categoria, visual refinado, Open Finance simulado.</li>
+      <li>[x] Microetapa 2: Open Finance simulado.</li>
+      <li>[ ] Pr&oacute;ximas: metas de gasto por categoria, visual refinado.</li>
     </ul>
   </li>
 </ul>
