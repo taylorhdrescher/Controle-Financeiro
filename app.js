@@ -1,4 +1,4 @@
-exigirLogin();
+﻿exigirLogin();
 
 var usuario = usuarioAtual();
 var prefixo = "cf_" + (usuario ? usuario.email : "anon") + "_";
@@ -61,7 +61,7 @@ function exibirCategorias() {
 
   for (var categoria in totais) {
     var item = document.createElement("li");
-    item.textContent = categoria + " — " + formatarDinheiro(totais[categoria]);
+    item.textContent = categoria + " â€” " + formatarDinheiro(totais[categoria]);
     lista.appendChild(item);
   }
 }
@@ -88,7 +88,7 @@ function exibirTransacoes() {
     meta.textContent = (despesa ? "Despesa" : "Receita");
 
     if (transacao.categoria) {
-      meta.textContent = meta.textContent + " • " + transacao.categoria;
+      meta.textContent = meta.textContent + " â€¢ " + transacao.categoria;
     }
 
     info.appendChild(titulo);
@@ -161,7 +161,7 @@ function importarCSV(texto) {
 
   var statusCsv = document.getElementById("csv-status");
   if (statusCsv) {
-    statusCsv.textContent = importadas + " transação(ões) importada(s).";
+    statusCsv.textContent = importadas + " transaÃ§Ã£o(Ãµes) importada(s).";
   }
 
   var inputCsv = document.getElementById("arquivo-csv");
@@ -220,18 +220,18 @@ document.getElementById("arquivo-csv").addEventListener("change", function (even
 var contasOpenFinance = {
   "Banco Aurora": [
     { descricao: "Pix recebido", valor: 250, tipo: "receita" },
-    { descricao: "Supermercado", valor: 320.5, tipo: "despesa", categoria: "Alimentação" },
+    { descricao: "Supermercado", valor: 320.5, tipo: "despesa", categoria: "AlimentaÃ§Ã£o" },
     { descricao: "Posto de gasolina", valor: 180, tipo: "despesa", categoria: "Transporte" }
   ],
   "Banco Laranja": [
-    { descricao: "Salário", valor: 2800, tipo: "receita" },
+    { descricao: "SalÃ¡rio", valor: 2800, tipo: "receita" },
     { descricao: "Conta de luz", valor: 145.9, tipo: "despesa", categoria: "Moradia" },
-    { descricao: "Farmácia", valor: 62.4, tipo: "despesa", categoria: "Saúde" },
+    { descricao: "FarmÃ¡cia", valor: 62.4, tipo: "despesa", categoria: "SaÃºde" },
     { descricao: "Streaming", valor: 39.9, tipo: "despesa", categoria: "Lazer" }
   ],
   "Fintech Pingo": [
-    { descricao: "Transferência recebida", valor: 500, tipo: "receita" },
-    { descricao: "Restaurante", valor: 88.6, tipo: "despesa", categoria: "Alimentação" },
+    { descricao: "TransferÃªncia recebida", valor: 500, tipo: "receita" },
+    { descricao: "Restaurante", valor: 88.6, tipo: "despesa", categoria: "AlimentaÃ§Ã£o" },
     { descricao: "Aplicativo de transporte", valor: 27.5, tipo: "despesa", categoria: "Transporte" }
   ]
 };
@@ -243,7 +243,7 @@ document.getElementById("btn-openfinance").addEventListener("click", function ()
   var botao = document.getElementById("btn-openfinance");
 
   if (!consentimento) {
-    alert("Marque a autorização para compartilhar os dados (simulado).");
+    alert("Marque a autorizaÃ§Ã£o para compartilhar os dados (simulado).");
     return;
   }
 
@@ -259,7 +259,7 @@ document.getElementById("btn-openfinance").addEventListener("click", function ()
     }
 
     atualizarTela();
-    status.textContent = movimentacoes.length + " transação(ões) sincronizada(s) do " + banco + ".";
+    status.textContent = movimentacoes.length + " transaÃ§Ã£o(Ãµes) sincronizada(s) do " + banco + ".";
     botao.disabled = false;
   }, 1500);
 });
