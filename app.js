@@ -72,17 +72,34 @@ function exibirTransacoes() {
 
   for (var i = 0; i < transacoes.length; i++) {
     var transacao = transacoes[i];
-    var item = document.createElement("li");
     var despesa = ehDespesa(transacao);
-    var sinal = despesa ? "- " : "+ ";
-    var texto = transacao.descricao + " — " + sinal + formatarDinheiro(transacao.valor);
+
+    var item = document.createElement("li");
+
+    var info = document.createElement("div");
+    info.className = "transacao-info";
+
+    var titulo = document.createElement("div");
+    titulo.className = "transacao-titulo";
+    titulo.textContent = transacao.descricao;
+
+    var meta = document.createElement("div");
+    meta.className = "transacao-meta";
+    meta.textContent = (despesa ? "Despesa" : "Receita");
 
     if (transacao.categoria) {
-      texto = texto + " [" + transacao.categoria + "]";
+      meta.textContent = meta.textContent + " • " + transacao.categoria;
     }
 
-    item.textContent = texto;
-    item.className = despesa ? "despesa" : "receita";
+    info.appendChild(titulo);
+    info.appendChild(meta);
+
+    var valor = document.createElement("div");
+    valor.className = "transacao-valor " + (despesa ? "despesa" : "receita");
+    valor.textContent = (despesa ? "- " : "+ ") + formatarDinheiro(transacao.valor);
+
+    item.appendChild(info);
+    item.appendChild(valor);
     lista.appendChild(item);
   }
 }
@@ -141,7 +158,16 @@ function importarCSV(texto) {
   }
 
   atualizarTela();
-  alert(importadas + " transação(ões) importada(s).");
+
+  var statusCsv = document.getElementById("csv-status");
+  if (statusCsv) {
+    statusCsv.textContent = importadas + " transação(ões) importada(s).";
+  }
+
+  var inputCsv = document.getElementById("arquivo-csv");
+  if (inputCsv) {
+    inputCsv.value = "";
+  }
 }
 
 document.getElementById("form-receita").addEventListener("submit", function (evento) {
@@ -237,6 +263,21 @@ document.getElementById("btn-openfinance").addEventListener("click", function ()
     botao.disabled = false;
   }, 1500);
 });
+
+var inputArquivoCsv = document.getElementById("arquivo-csv");
+if (inputArquivoCsv) {
+  inputArquivoCsv.addEventListener("change", function () {
+    var arquivo = this.files[0];
+    var statusCsv = document.getElementById("csv-status");
+    if (statusCsv) {
+      if (arquivo) {
+        statusCsv.textContent = "Arquivo: " + arquivo.name;
+      } else {
+        statusCsv.textContent = "";
+      }
+    }
+  });
+}
 
 document.getElementById("usuario-atual").textContent = "Olá, " + (usuario ? usuario.nome : "") + "!";
 document.getElementById("btn-sair").addEventListener("click", sair);
