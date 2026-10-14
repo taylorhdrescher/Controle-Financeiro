@@ -59,6 +59,9 @@ Fase 3 — Categorias e organização (próxima a começar)
   - [x] Microetapa 3: Formulário de despesas (saldo diminui)
   - [x] Microetapa 3b: Salvar o saldo no localStorage (não perde ao atualizar)
   - [x] Microetapa 4: Listar as transações na tela (extrato + array + JSON salvos)
+- Fase 3 — Categorias e organização
+  - [x] Microetapa 1: Criar o seletor de categorias no formulário de despesa (HTML + CSS)
+  - [x] Microetapa 2: Salvar a categoria em cada transação (no objeto) e no localStorage
 
 ## Conceitos já ensinados
 - Arquivo, extensão (.html, .css, .js) e função de cada arquivo.
@@ -70,6 +73,8 @@ Fase 3 — Categorias e organização (próxima a começar)
 - Media query para responsividade.
 - Eventos (submit), addEventListener, preventDefault, .value, Number().
 - Persistência: localStorage (getItem/setItem), gaveta só guarda texto.
+- Array, objeto, push, length, laço for; createElement/appendChild; JSON (stringify/parse).
+- select/option (menu dropdown) para categorias.
 - Array (lista), objeto {chave: valor}, push(), length, laço for.
 - Criar elementos na tela: createElement + appendChild.
 - JSON: stringify (texto) e parse (lista) — ponte com a gaveta.
@@ -84,7 +89,7 @@ Nenhum.
 - Bug: transação sem valor era adicionada ao extrato. Causa: `Number("")` vira 0 e não havia checagem. Correção: validação `if (valor <= 0)` com `alert` e `return` nos dois formulários.
 
 ## Próxima microetapa
-Fase 2 concluída. Próxima: Fase 3 — Categorias e organização.
+Fase 3 — Microetapa 3: mostrar a categoria no extrato.
 
 ## Observações
 - Todo o conteúdo didático (explicações de cada microetapa, bugs corrigidos e GitHub) está salvo de forma permanente em **TUTORIAL.md** e regenerado em **TUTORIAL.pdf**.

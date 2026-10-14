@@ -17,7 +17,11 @@ function exibirTransacoes() {
   for (var i = 0; i < transacoes.length; i++) {
     var item = document.createElement("li");
     var transacao = transacoes[i];
-    item.textContent = transacao.descricao + " — R$ " + transacao.valor.toFixed(2).replace(".", ",");
+    if (transacao.categoria) {
+      item.textContent = transacao.descricao + " [" + transacao.categoria + "] — R$ " + transacao.valor.toFixed(2).replace(".", ",");
+    } else {
+      item.textContent = transacao.descricao + " — R$ " + transacao.valor.toFixed(2).replace(".", ",");
+    }
     lista.appendChild(item);
   }
 }
@@ -46,6 +50,7 @@ document.getElementById("form-despesa").addEventListener("submit", function (eve
 
   var descricao = document.getElementById("descricao-despesa").value;
   var valor = Number(document.getElementById("valor-despesa").value);
+  var categoria = document.getElementById("categoria-despesa").value;
 
   if (valor <= 0) {
     alert("Digite um valor maior que zero.");
@@ -53,7 +58,7 @@ document.getElementById("form-despesa").addEventListener("submit", function (eve
   }
 
   saldo = saldo - valor;
-  transacoes.push({ descricao: descricao, valor: valor });
+  transacoes.push({ descricao: descricao, valor: valor, categoria: categoria });
 
   exibirSaldo();
   salvarTransacoes();
