@@ -47,7 +47,8 @@
   <li>Bugs corrigidos (saldo ap&oacute;s F5 e transa&ccedil;&atilde;o sem valor)</li>
   <li>Fase 3 &mdash; Categorias e organiza&ccedil;&atilde;o (3 microetapas)</li>
   <li>Fase 4 &mdash; Resumo e total por categoria (3 microetapas)</li>
-  <li>Fase 5 &mdash; Aperfei&ccedil;oamentos e diferenciais (em andamento)</li>
+  <li>Fase 5 &mdash; Aperfei&ccedil;oamentos e diferenciais (2 microetapas)</li>
+  <li>Fase 6 &mdash; Entrada do site: landing + cadastro/login (6 microetapas)</li>
   <li>GitHub: subindo o projeto para a nuvem</li>
   <li>Gloss&aacute;rio: conceitos aprendidos</li>
   <li>Pr&oacute;ximos passos</li>
@@ -583,6 +584,52 @@ function atualizarTela() {
 <p><strong>A grande sacada:</strong> a sincroniza&ccedil;&atilde;o <strong>reaproveita</strong> <code>registrarTransacao</code> e <code>atualizarTela</code> (Microetapa 1). Como a l&oacute;gica j&aacute; estava centralizada, adicionar um banco novo n&atilde;o exigiu mexer no saldo, no extrato nem no resumo &mdash; <strong>o valor da refatora&ccedil;&atilde;o aparecendo</strong>.</p>
 <p><strong>Li&ccedil;&atilde;o:</strong> em sistemas reais, integrar com terceiros envolve consentimento, tratamento de erros e tempo de espera.</p>
 
+<h1 class="pagebreak">FASE 6 &mdash; ENTRADA DO SITE: LANDING + CADASTRO/LOGIN</h1>
+<p>At&eacute; agora, ao abrir o <code>index.html</code>, voc&ecirc; ca&iacute;a direto no app. Nesta fase o site ganha uma <strong>porta de entrada</strong>: uma p&aacute;gina de apresenta&ccedil;&atilde;o (landing), telas de <strong>cadastro</strong> e <strong>login</strong>, e o app s&oacute; abre para quem est&aacute; logado.</p>
+
+<h2>Microetapa 1 &mdash; Separar o app em app.html</h2>
+<p>A p&aacute;gina que j&aacute; existia (o app) vira <code>app.html</code>, e o nome <code>index.html</code> passa a ser a <strong>landing</strong>. Assim separamos "entrada do site" de "aplicativo":</p>
+<table>
+  <tr><th>Arquivo</th><th>Papel</th></tr>
+  <tr><td>index.html</td><td>landing (p&aacute;gina de apresenta&ccedil;&atilde;o)</td></tr>
+  <tr><td>cadastro.html / login.html</td><td>criar conta / entrar</td></tr>
+  <tr><td>app.html</td><td>o aplicativo (saldo, extrato, resumo...)</td></tr>
+</table>
+<p><strong>Conceito novo &mdash; site multi-p&aacute;gina:</strong> o projeto deixou de ser uma p&aacute;gina s&oacute; e passou a ser v&aacute;rias, ligadas por links (<code>&lt;a href="..."&gt;</code>) e pelo JavaScript (<code>window.location.href = "app.html"</code>).</p>
+<p><strong>Importante:</strong> o <code>localStorage</code> &eacute; <strong>compartilhado entre as p&aacute;ginas</strong> da mesma pasta/origem &mdash; por isso a sess&atilde;o atravessa da tela de login para o app.</p>
+
+<h2>Microetapa 2 &mdash; A biblioteca auth.js</h2>
+<p>Um arquivo s&oacute; com as fun&ccedil;&otilde;es de autentica&ccedil;&atilde;o, reaproveitado por todas as p&aacute;ginas &mdash; uma <strong>caixa de ferramentas compartilhada</strong>. Inclu&iacute;do com <code>&lt;script src="auth.js"&gt;&lt;/script&gt;</code> antes do script de cada p&aacute;gina.</p>
+<ul>
+  <li><code>carregarUsuarios()</code> / <code>salvarUsuarios(lista)</code> &mdash; leem e gravam a lista de contas (chave <code>cf_usuarios</code>).</li>
+  <li><code>hashSenha(senha)</code> &mdash; transforma a senha em um <strong>c&oacute;digo</strong> (hash).</li>
+  <li><code>existeEmail(email)</code> &mdash; evita cadastrar o mesmo e-mail duas vezes.</li>
+  <li><code>sessaoEmail()</code> / <code>definirSessao(email)</code> / <code>sair()</code> &mdash; guardam/limpam quem est&aacute; logado (chave <code>cf_sessao</code>).</li>
+  <li><code>usuarioAtual()</code> &mdash; devolve os dados do usu&aacute;rio logado.</li>
+  <li><code>exigirLogin()</code> &mdash; se n&atilde;o h&aacute; sess&atilde;o, manda o navegador para o login.</li>
+</ul>
+<p><strong>Aten&ccedil;&atilde;o:</strong> o nosso hash &eacute; <strong>simples e did&aacute;tico</strong>. Em um app real a senha &eacute; protegida <strong>no servidor</strong> (algoritmos como bcrypt), com HTTPS e LGPD.</p>
+
+<h2>Microetapa 3 &mdash; Cadastro (cadastro.html + cadastro.js)</h2>
+<p>Formul&aacute;rio com <strong>nome, e-mail e senha</strong>. Ao enviar: <code>preventDefault()</code>; valida campos vazios; <code>existeEmail</code> bloqueia repetido; monta o usu&aacute;rio com <code>senha: hashSenha(senha)</code>; <code>salvarUsuarios</code> grava; mostra um <code>alert</code> de sucesso e vai para o <code>login.html</code>.</p>
+
+<h2>Microetapa 4 &mdash; Login (login.html + login.js)</h2>
+<p>L&ecirc; e-mail e senha, procura o usu&aacute;rio e compara <code>hashSenha(senha)</code> com a senha guardada. Se bater, <code>definirSessao(email)</code> e vai para o <code>app.html</code>; se n&atilde;o, avisa "e-mail ou senha inv&aacute;lidos". <strong>Lembrete:</strong> n&atilde;o revelamos <em>qual</em> dos dois errou &mdash; isso n&atilde;o d&aacute; pistas para adivinhar senhas.</p>
+
+<h2>Microetapa 5 &mdash; Proteger o app + dados por usu&aacute;rio</h2>
+<p>A <strong>primeira linha</strong> do <code>app.js</code> &eacute; <code>exigirLogin();</code> &mdash; quem n&atilde;o tem sess&atilde;o nunca v&ecirc; o app. E as chaves do <code>localStorage</code> ganham o e-mail do usu&aacute;rio:</p>
+<pre>var usuario = usuarioAtual();
+var prefixo = "cf_" + usuario.email + "_";
+var saldo = Number(localStorage.getItem(prefixo + "saldo")) || 0;</pre>
+<p>Assim cada conta tem seus pr&oacute;prios dados (<code>cf_maria@..._saldo</code>, <code>cf_joao@..._saldo</code>...). O cabe&ccedil;alho mostra "Ol&aacute;, &lt;nome&gt;!" e um bot&atilde;o <strong>Sair</strong> que chama <code>sair()</code>.</p>
+
+<h2>Microetapa 6 &mdash; A landing (index.html + entrar.css)</h2>
+<p>P&aacute;gina de apresenta&ccedil;&atilde;o com cabe&ccedil;alho (Entrar / Criar conta), um <strong>destaque (hero)</strong>, uma <strong>faixa de categorias</strong> que rola, <strong>cart&otilde;es de recursos</strong> e um convite final.</p>
+<p><strong>Estilo:</strong> inspirado no site <strong>valuationia.com.br</strong> (visual editorial: t&iacute;tulo grande, cantos retos, grade sutil no fundo, cart&otilde;es que "sobem" no hover), <strong>mas com as cores do projeto</strong> (fundo #111827, cart&otilde;es #1f2937, destaque laranja #f97316, texto #f9fafb).</p>
+<p><strong>Conceitos novos de CSS:</strong> vari&aacute;veis em <code>:root</code>; grade de fundo com <code>linear-gradient</code>; <code>mask-image</code> (recorte com degrad&ecirc;); <code>@keyframes</code> + <code>animation</code> (entrada e faixa rolante); <code>-webkit-text-stroke</code> (texto vazado); fontes do Google (Plus Jakarta Sans e JetBrains Mono).</p>
+<p><strong>Teste:</strong> abra o <code>index.html</code> &rarr; Criar conta &rarr; cadastre &rarr; fa&ccedil;a login &rarr; o app abre com "Ol&aacute;, ...". Recarregue (F5): continua logado. Clique em <strong>Sair</strong>: volta para a landing e o app deixa de abrir.</p>
+<p><strong>Li&ccedil;&atilde;o:</strong> adicionar login mudou a <strong>arquitetura</strong> do site (de 1 para v&aacute;rias p&aacute;ginas) e ensinou dois temas de ouro: <strong>reutilizar c&oacute;digo</strong> (auth.js) e <strong>organizar dados</strong> (prefixo por usu&aacute;rio).</p>
+
 <h2 class="pagebreak">GITHUB &mdash; SUBINDO O PROJETO PARA A NUVEM</h2>
 <p><strong>Git</strong> = a "m&aacute;quina do tempo" (registra vers&otilde;es, d&aacute; para voltar no tempo). <strong>GitHub</strong> = servi&ccedil;o gr&aacute;tis que guarda o reposit&oacute;rio na nuvem (backup + compartilhamento).</p>
 <p><strong>Passos feitos:</strong></p>
@@ -654,6 +701,17 @@ function atualizarTela() {
   <tr><td>.disabled</td><td>Desliga/liga um bot&atilde;o</td><td>bot&atilde;o enquanto conecta</td></tr>
   <tr><td>setTimeout</td><td>Roda uma fun&ccedil;&atilde;o depois de um tempo</td><td>simular "conectando..."</td></tr>
   <tr><td>type="button"</td><td>Bot&atilde;o que n&atilde;o envia formul&aacute;rio</td><td>conectar ao banco</td></tr>
+  <tr><td>Site multi-p&aacute;gina</td><td>V&aacute;rias p&aacute;ginas .html ligadas por links</td><td>index &rarr; login &rarr; app</td></tr>
+  <tr><td>window.location.href</td><td>Manda o navegador para outra p&aacute;gina</td><td>ir para app.html</td></tr>
+  <tr><td>Biblioteca (script compartilhado)</td><td>Arquivo s&oacute; de fun&ccedil;&otilde;es usado em v&aacute;rias p&aacute;ginas</td><td>auth.js</td></tr>
+  <tr><td>Hash de senha</td><td>C&oacute;digo gerado a partir da senha</td><td>hashSenha()</td></tr>
+  <tr><td>Sess&atilde;o</td><td>Marca de quem est&aacute; logado</td><td>chave cf_sessao</td></tr>
+  <tr><td>exigirLogin</td><td>Protege a p&aacute;gina: expulsa quem n&atilde;o tem sess&atilde;o</td><td>1&ordf; linha do app.js</td></tr>
+  <tr><td>Prefixo por usu&aacute;rio</td><td>Chave do localStorage com o e-mail</td><td>cf_&lt;email&gt;_saldo</td></tr>
+  <tr><td>Vari&aacute;veis CSS (:root)</td><td>Valores reutiliz&aacute;veis no CSS</td><td>--accent: #f97316</td></tr>
+  <tr><td>@keyframes / animation</td><td>Anima&ccedil;&otilde;es em CSS</td><td>entrada e faixa rolante</td></tr>
+  <tr><td>mask-image</td><td>Recorte suave com degrad&ecirc;</td><td>fade do fundo/faixa</td></tr>
+  <tr><td>-webkit-text-stroke</td><td>Texto s&oacute; com contorno (vazado)</td><td>destaque do hero</td></tr>
 </table>
 
 <h1>PR&Oacute;XIMOS PASSOS</h1>
@@ -672,13 +730,23 @@ function atualizarTela() {
       <li>[x] Microetapa 3: gastos por categoria.</li>
     </ul>
   </li>
-  <li>Fase 5 &mdash; Aperfei&ccedil;oamentos e diferenciais &#128679; em andamento.
+  <li>Fase 5 &mdash; Aperfei&ccedil;oamentos e diferenciais &#9989; conclu&iacute;da.
     <ul>
       <li>[x] Microetapa 1: importa&ccedil;&atilde;o de extrato em CSV.</li>
       <li>[x] Microetapa 2: Open Finance simulado.</li>
-      <li>[ ] Pr&oacute;ximas: metas de gasto por categoria, visual refinado.</li>
     </ul>
   </li>
+  <li>Fase 6 &mdash; Entrada do site (landing + cadastro/login) &#9989; conclu&iacute;da.
+    <ul>
+      <li>[x] Microetapa 1: separar o app em app.html.</li>
+      <li>[x] Microetapa 2: biblioteca auth.js.</li>
+      <li>[x] Microetapa 3: cadastro.</li>
+      <li>[x] Microetapa 4: login.</li>
+      <li>[x] Microetapa 5: proteger o app + dados por usu&aacute;rio.</li>
+      <li>[x] Microetapa 6: landing no estilo valuationia (cores do projeto).</li>
+    </ul>
+  </li>
+  <li>Pr&oacute;ximas ideias: aplicar o visual da landing tamb&eacute;m ao app, metas de gasto por categoria, exportar relat&oacute;rio.</li>
 </ul>
 
 </body>

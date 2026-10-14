@@ -37,9 +37,16 @@
 5. Fase 5 — Aperfeiçoamentos e diferenciais
    - Microetapa 1: Importação de extrato em CSV
    - Microetapa 2: Open Finance simulado
-6. GitHub: subindo o projeto para a nuvem
-7. Conceitos aprendidos até aqui (glossário)
-8. Próximos passos
+6. Fase 6 — Entrada do site: landing + cadastro/login
+   - Microetapa 1: Separar o app em app.html
+   - Microetapa 2: A biblioteca auth.js
+   - Microetapa 3: Cadastro (cadastro.html + cadastro.js)
+   - Microetapa 4: Login (login.html + login.js)
+   - Microetapa 5: Proteger o app + dados por usuário
+   - Microetapa 6: A landing (index.html + entrar.css)
+7. GitHub: subindo o projeto para a nuvem
+8. Conceitos aprendidos até aqui (glossário)
+9. Próximos passos
 
 ---
 
@@ -797,6 +804,102 @@ document.getElementById("btn-openfinance").addEventListener("click", function ()
 
 ---
 
+# FASE 6 — ENTRADA DO SITE: LANDING + CADASTRO/LOGIN
+
+Até agora, ao abrir o `index.html`, você caía direto no app. Nesta fase o site ganha uma **porta de entrada**: uma página de apresentação (landing), telas de **cadastro** e **login**, e o app só abre para quem está logado.
+
+## Microetapa 1 — Separar o app em app.html
+
+**O que é / por quê:** a página que já existia (o app) vira `app.html`, e o nome `index.html` passa a ser a **landing** (página de apresentação). Assim separamos "entrada do site" de "aplicativo".
+
+**Como fizemos:** copiamos o conteúdo que estava no `index.html` para um novo arquivo `app.html`. A partir de agora:
+
+| Arquivo | Papel |
+|---|---|
+| `index.html` | landing (página de apresentação) |
+| `cadastro.html` / `login.html` | criar conta / entrar |
+| `app.html` | o aplicativo (saldo, extrato, resumo...) |
+
+**Conceito novo — site multi-página:** o projeto deixou de ser uma página só e passou a ser **várias páginas** ligadas por links (`<a href="...">`) e pelo JavaScript (`window.location.href = "app.html"`).
+
+**Importante:** o `localStorage` é **compartilhado entre as páginas** da mesma pasta/origem. É por isso que a sessão (quem está logado) "atravessa" da tela de login para o app.
+
+## Microetapa 2 — A biblioteca auth.js
+
+**O que é:** um arquivo só com as funções de autenticação, reaproveitado por todas as páginas — uma **caixa de ferramentas compartilhada**. Incluímos com `<script src="auth.js"></script>` **antes** do script de cada página.
+
+**As funções:**
+- `carregarUsuarios()` / `salvarUsuarios(lista)` — leem e gravam a lista de contas (chave `cf_usuarios`).
+- `hashSenha(senha)` — transforma a senha em um **código** (hash), para não guardar o texto puro.
+- `existeEmail(email)` — evita cadastrar o mesmo e-mail duas vezes.
+- `sessaoEmail()` / `definirSessao(email)` / `sair()` — guardam/limpam quem está logado (chave `cf_sessao`).
+- `usuarioAtual()` — devolve os dados do usuário logado.
+- `exigirLogin()` — se não há sessão, manda o navegador para o login.
+
+**Conceitos novos:**
+- **Biblioteca / código compartilhado:** uma função escrita uma vez serve para várias páginas. Isso é **DRY** de novo (não repetir).
+- **Hash de senha:** um resumo embaralhado da senha. **Atenção:** o nosso é um hash **simples e didático** — em um app real a senha é protegida **no servidor**, com algoritmos próprios (bcrypt etc.), HTTPS e LGPD.
+
+## Microetapa 3 — Cadastro (cadastro.html + cadastro.js)
+
+**O que faz:** formulário com **nome, e-mail e senha**. Ao enviar:
+1. `preventDefault()` para não recarregar;
+2. valida se há campos vazios;
+3. `existeEmail` bloqueia e-mail repetido;
+4. monta o objeto do usuário com `senha: hashSenha(senha)`;
+5. `salvarUsuarios` grava a lista;
+6. mostra um `alert` de sucesso e vai para o `login.html`.
+
+**Conceitos:** **reutilizar funções de outro arquivo** (auth.js), `alert()`, `window.location.href`.
+
+## Microetapa 4 — Login (login.html + login.js)
+
+**O que faz:** lê e-mail e senha e procura o usuário; compara `hashSenha(senha)` com a senha guardada. Se bater, chama `definirSessao(email)` e vai para o `app.html`. Se não, avisa "e-mail ou senha inválidos".
+
+**Lição de segurança:** não revelamos **qual** dos dois errou — isso não dá pistas para quem tenta adivinhar senhas.
+
+## Microetapa 5 — Proteger o app + dados por usuário
+
+**Exigir login:** a **primeira linha** do `app.js` é:
+
+```js
+exigirLogin();
+```
+
+Quem não tem sessão nunca chega a ver o app — é redirecionado para o login.
+
+**Dados separados por conta:** as chaves do `localStorage` passam a ter o e-mail do usuário:
+
+```js
+var usuario = usuarioAtual();
+var prefixo = "cf_" + usuario.email + "_";
+var saldo = Number(localStorage.getItem(prefixo + "saldo")) || 0;
+```
+
+Assim a Maria não vê os dados do João: cada conta tem suas próprias chaves (`cf_maria@..._saldo`, `cf_joao@..._saldo`...).
+
+**Saudação + Sair:** o cabeçalho mostra "Olá, <nome>!" e um botão **Sair** que chama `sair()` — apaga a sessão e volta para a landing.
+
+## Microetapa 6 — A landing (index.html + entrar.css)
+
+**O que faz:** página de apresentação com cabeçalho (Entrar / Criar conta), um **destaque (hero)** com a chamada principal, uma **faixa de categorias** que rola, **cartões de recursos** e um convite final para criar conta.
+
+**Estilo:** inspirado no site **valuationia.com.br** (visual editorial: título grande, cantos retos, grade sutil no fundo, cartões que "sobem" no hover e pequenos rótulos em fonte mono), **mas com as cores do projeto** (fundo `#111827`, cartões `#1f2937`, destaque laranja `#f97316`, texto `#f9fafb`).
+
+**Conceitos novos de CSS:**
+- **Variáveis em `:root`** — guardamos as cores/tamanhos em um só lugar (`--accent: #f97316`) e reusamos.
+- **Grade de fundo** com `background-image` + `linear-gradient` de 1px.
+- **`mask-image`** — recorte suave (o fade do fundo e das bordas da faixa).
+- **`@keyframes` + `animation`** — a entrada dos textos e a faixa que rola para sempre.
+- **`-webkit-text-stroke`** — o texto "vazado" (só contorno) no destaque.
+- **Fontes do Google** (Plus Jakarta Sans e JetBrains Mono) e `:hover` com `translateY` + `transition`.
+
+**Teste:** abra `index.html` → Criar conta → cadastre → faça login → o app abre com "Olá, ...". Recarregue (F5): continua logado. Clique em **Sair**: volta para a landing e o app deixa de abrir.
+
+**Lição:** adicionar login mudou a **arquitetura** do site (de 1 para várias páginas) e ensinou dois temas de ouro: **reutilizar código** (auth.js) e **organizar dados** (prefixo por usuário). E reforçou que autenticação **de verdade** precisa de servidor — aqui é uma simulação didática.
+
+---
+
 ## GITHUB — subindo o projeto para a nuvem
 
 **O que é:** **Git** = a "máquina do tempo" do projeto (registra versões dos arquivos, dá para voltar no tempo). **GitHub** = serviço grátis que guarda o repositório na nuvem (backup + compartilhamento com o professor).
@@ -892,6 +995,17 @@ exibirSaldo();
 | `.disabled` | Desliga/liga um botão | botão enquanto conecta |
 | setTimeout | Roda uma função depois de um tempo | simular "conectando..." |
 | type="button" | Botão que não envia formulário | conectar ao banco |
+| Site multi-página | Várias páginas .html ligadas por links | index → login → app |
+| window.location.href | Manda o navegador para outra página | ir para app.html |
+| Biblioteca (script compartilhado) | Arquivo só de funções usado em várias páginas | auth.js |
+| Hash de senha | Código gerado a partir da senha | `hashSenha()` |
+| Sessão | Marca de quem está logado | chave `cf_sessao` |
+| exigirLogin | Protege a página: expulsa quem não tem sessão | 1ª linha do app.js |
+| Prefixo por usuário | Chave do localStorage com o e-mail | `cf_<email>_saldo` |
+| Variáveis CSS (:root) | Valores reutilizáveis no CSS | `--accent: #f97316` |
+| @keyframes / animation | Animações em CSS | entrada e faixa rolante |
+| mask-image | Recorte suave com degradê | fade do fundo/faixa |
+| -webkit-text-stroke | Texto só com contorno (vazado) | destaque do hero |
 
 ---
 
@@ -904,7 +1018,14 @@ exibirSaldo();
   - [x] Microetapa 1: tipo da transação e cores no extrato.
   - [x] Microetapa 2: seção Resumo (receitas e despesas).
   - [x] Microetapa 3: gastos por categoria.
-- Fase 5 — Aperfeiçoamentos e diferenciais 🚧 em andamento.
+- Fase 5 — Aperfeiçoamentos e diferenciais ✅ concluída.
   - [x] Microetapa 1: importação de extrato em CSV.
   - [x] Microetapa 2: Open Finance simulado.
-  - [ ] Próximas: metas de gasto por categoria, visual refinado.
+- Fase 6 — Entrada do site (landing + cadastro/login) ✅ concluída.
+  - [x] Microetapa 1: separar o app em app.html.
+  - [x] Microetapa 2: biblioteca auth.js.
+  - [x] Microetapa 3: cadastro.
+  - [x] Microetapa 4: login.
+  - [x] Microetapa 5: proteger o app + dados por usuário.
+  - [x] Microetapa 6: landing no estilo valuationia (cores do projeto).
+- Próximas ideias: aplicar o visual da landing também ao app, metas de gasto por categoria, exportar relatório.

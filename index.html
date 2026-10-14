@@ -3,89 +3,70 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Controle Financeiro</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Controle Financeiro — seu dinheiro sob controle</title>
+  <meta name="description" content="Registre receitas e despesas, veja para onde o seu dinheiro vai e acompanhe tudo em um só lugar.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="entrar.css">
 </head>
 <body>
-  <header>
-    <h1>Meu Controle Financeiro</h1>
+  <header class="topo">
+    <div class="marca">Controle<span class="ponto">.</span>Financeiro</div>
+    <nav class="menu">
+      <a href="login.html" class="link">Entrar</a>
+      <a href="cadastro.html" class="botao botao-pequeno">Criar conta</a>
+    </nav>
   </header>
+
   <main>
-    <section>
-      <h2>Saldo atual</h2>
-      <p>R$ <span id="saldo"></span></p>
+    <section class="hero">
+      <p class="label surgir">Controle financeiro pessoal</p>
+      <h1 class="surgir surgir-2">Seu dinheiro, finalmente <span class="vazado">sob controle</span>.</h1>
+      <p class="subtitulo surgir surgir-3">Registre receitas e despesas, descubra para onde o seu dinheiro vai e acompanhe tudo em um só lugar — sem planilhas complicadas.</p>
+      <div class="acoes surgir surgir-4">
+        <a href="cadastro.html" class="botao">Começar agora</a>
+        <a href="login.html" class="botao botao-secundario">Já tenho conta</a>
+      </div>
     </section>
 
-    <section>
-      <h2>Resumo</h2>
-      <p>Receitas: <span id="total-receitas" class="receita"></span></p>
-      <p>Despesas: <span id="total-despesas" class="despesa"></span></p>
+    <div class="tira">
+      <div class="tira-conteudo">
+        <span>Moradia</span><span>Alimentação</span><span>Transporte</span><span>Lazer</span><span>Saúde</span><span>Outros</span>
+        <span>Moradia</span><span>Alimentação</span><span>Transporte</span><span>Lazer</span><span>Saúde</span><span>Outros</span>
+      </div>
+    </div>
+
+    <section class="recursos">
+      <article class="card">
+        <span class="num">01</span>
+        <h3>Receitas e despesas</h3>
+        <p>Adicione entradas e saídas em segundos e veja o saldo atualizar na hora.</p>
+      </article>
+      <article class="card">
+        <span class="num">02</span>
+        <h3>Resumo por categoria</h3>
+        <p>Descubra quanto você gasta em alimentação, transporte, moradia e muito mais.</p>
+      </article>
+      <article class="card">
+        <span class="num">03</span>
+        <h3>Importe e conecte</h3>
+        <p>Traga o seu extrato em CSV ou sincronize com um banco (simulado).</p>
+      </article>
     </section>
 
-    <section>
-      <h2>Adicionar receita</h2>
-      <form id="form-receita">
-        <label for="descricao">Descrição</label>
-        <input type="text" id="descricao" placeholder="Ex: Salário">
-        <label for="valor">Valor (R$)</label>
-        <input type="number" id="valor" step="0.01" min="0">
-        <button type="submit">Adicionar</button>
-      </form>
-    </section>
-
-    <section>
-      <h2>Adicionar despesa</h2>
-      <form id="form-despesa">
-        <label for="descricao-despesa">Descrição</label>
-        <input type="text" id="descricao-despesa" placeholder="Ex: Aluguel">
-        <label for="categoria-despesa">Categoria</label>
-        <select id="categoria-despesa">
-          <option>Moradia</option>
-          <option>Alimentação</option>
-          <option>Transporte</option>
-          <option>Lazer</option>
-          <option>Saúde</option>
-          <option>Outros</option>
-        </select>
-        <label for="valor-despesa">Valor (R$)</label>
-        <input type="number" id="valor-despesa" step="0.01" min="0">
-        <button type="submit">Adicionar</button>
-      </form>
-    </section>
-
-    <section>
-      <h2>Importar extrato (CSV)</h2>
-      <p class="dica">Formato: descricao,valor,tipo,categoria (uma transação por linha).</p>
-      <input type="file" id="arquivo-csv" accept=".csv">
-    </section>
-
-    <section>
-      <h2>Open Finance (simulado)</h2>
-      <p class="dica">Conexão fictícia com um banco. Nenhum dado real é usado — é só uma simulação.</p>
-      <label for="banco-openfinance">Instituição</label>
-      <select id="banco-openfinance">
-        <option>Banco Aurora</option>
-        <option>Banco Laranja</option>
-        <option>Fintech Pingo</option>
-      </select>
-      <label class="consentimento">
-        <input type="checkbox" id="consentimento-openfinance">
-        Autorizo o compartilhamento dos meus dados (simulado)
-      </label>
-      <button type="button" id="btn-openfinance">Conectar e importar</button>
-      <p id="status-openfinance"></p>
-    </section>
-
-    <section>
-      <h2>Gastos por categoria</h2>
-      <ul id="lista-categorias"></ul>
-    </section>
-
-    <section>
-      <h2>Extrato</h2>
-      <ul id="lista-transacoes"></ul>
+    <section class="cta">
+      <h2>Crie sua conta grátis</h2>
+      <p>Leva menos de um minuto. Seus dados ficam guardados no seu próprio navegador.</p>
+      <div class="acoes">
+        <a href="cadastro.html" class="botao">Criar conta</a>
+        <a href="login.html" class="botao botao-secundario">Entrar</a>
+      </div>
     </section>
   </main>
-  <script src="app.js"></script>
+
+  <footer class="rodape">
+    <p>Projeto acadêmico — cada conta guarda os dados no seu próprio navegador.</p>
+  </footer>
 </body>
 </html>

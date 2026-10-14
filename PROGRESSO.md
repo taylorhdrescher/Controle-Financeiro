@@ -3,7 +3,7 @@
 > Este arquivo é a memória do projeto. Ao abrir uma nova sessão, leia-o para recuperar o contexto.
 
 ## Descrição do projeto
-Site responsivo de controle financeiro pessoal (receitas, despesas e resumo de saldo), construído do zero como projeto de faculdade, com acompanhamento didático passo a passo. Estilo visual inspirado no Meu Planner Financeiro (dark + laranja).
+Site responsivo de controle financeiro pessoal (receitas, despesas e resumo de saldo), construído do zero como projeto de faculdade, com acompanhamento didático passo a passo. Estilo visual dark + laranja: o **app** inspirado no Meu Planner Financeiro e a **landing/entrada** inspirada no valuationia.com.br (com as cores do projeto). Agora com cadastro e login (autenticação simulada).
 
 ## GitHub
 - Repositório: https://github.com/taylorhdrescher/Controle-Financeiro
@@ -15,7 +15,10 @@ Site responsivo de controle financeiro pessoal (receitas, despesas e resumo de s
 - Formato: **site responsivo** (funciona em PC e celular).
 - Tecnologias: HTML, CSS, JavaScript puro e localStorage. (Sem frameworks, sem servidor — mais simples para aprender.)
 - Visual: **dark + laranja** (#111827 fundo, #1f2937 cartões, #f97316 destaque, texto #f9fafb), referência: meuplannerfinanceiro.com.br.
-- Open Finance real: descartado para projeto acadêmico (exige registro no Banco Central, certificados e LGPD). Em aberto: Open Finance simulado OU importação de extrato em CSV.
+- Open Finance real: descartado para projeto acadêmico (exige registro no Banco Central, certificados e LGPD). Implementado como **simulado** + importação de extrato em CSV.
+- Autenticação **simulada** (cadastro/login): contas guardadas no localStorage do navegador. NÃO é seguro de verdade (um app real faria o login em um servidor, com senha criptografada, HTTPS e LGPD). Serve para aprender o fluxo.
+- Arquitetura multi-página: cada tela é um arquivo .html (`index.html` landing → `cadastro.html`/`login.html` → `app.html`). O localStorage é compartilhado entre elas (mesma origem), então a sessão "atravessa" as telas.
+- Cada usuário tem seus próprios dados: as chaves do localStorage são prefixadas com o e-mail (`cf_<email>_saldo`, `cf_<email>_transacoes`).
 
 ## Tecnologias escolhidas e por quê
 - **HTML**: define a estrutura da página (textos, campos, botões).
@@ -26,9 +29,16 @@ Site responsivo de controle financeiro pessoal (receitas, despesas e resumo de s
 ## Estrutura dos arquivos
 ```
 controle-financeiro/
-├── index.html    → estrutura da página
-├── style.css     → visual (tema dark + laranja responsivo)
-├── app.js        → lógica (saldo, formulários, extrato, resumo, CSV, localStorage)
+├── index.html    → landing (página de entrada) — estilo inspirado no valuationia
+├── entrar.css    → visual da landing + login + cadastro (dark + laranja)
+├── cadastro.html → formulário de criação de conta
+├── cadastro.js   → lógica do cadastro (valida, evita e-mail repetido, salva)
+├── login.html    → formulário de login
+├── login.js      → lógica do login (confere e-mail/senha e cria a sessão)
+├── auth.js       → "biblioteca" de autenticação (usuários, sessão, hash)
+├── app.html      → o aplicativo em si (saldo, extrato, resumo, CSV, Open Finance)
+├── app.js        → lógica do app (agora protegida por exigirLogin)
+├── style.css     → visual do app (tema dark + laranja responsivo)
 ├── exemplo-extrato.csv → arquivo de exemplo para testar a importação CSV
 ├── README.md     → capa do repositório no GitHub
 ├── PROGRESSO.md  → memória do projeto (estado, decisões, fases)
@@ -42,10 +52,11 @@ controle-financeiro/
 2. Fase 2 — Cadastro de transações ✅ concluída (6 microetapas)
 3. Fase 3 — Categorias e organização ✅ concluída (3 microetapas)
 4. Fase 4 — Resumo e total por categoria ✅ concluída (3 microetapas)
-5. Fase 5 — Aperfeiçoamentos e diferenciais 🚧 em andamento (importação CSV; depois: metas, visual refinado, Open Finance simulado)
+5. Fase 5 — Aperfeiçoamentos e diferenciais ✅ concluída (2 microetapas: importação CSV e Open Finance simulado)
+6. Fase 6 — Entrada do site: landing + cadastro/login ✅ concluída (landing estilo valuationia + auth simulada)
 
 ## Fase atual
-Fase 5 — Aperfeiçoamentos e diferenciais (Microetapas 1 e 2 concluídas — importação CSV e Open Finance simulado)
+Fase 6 — Entrada do site concluída (landing, cadastro, login e proteção do app). Próxima: Fase 7 (a definir).
 
 ## Microetapas concluídas
 - Fase 1 — Estrutura e interface básica
@@ -71,7 +82,13 @@ Fase 5 — Aperfeiçoamentos e diferenciais (Microetapas 1 e 2 concluídas — i
 - Fase 5 — Aperfeiçoamentos e diferenciais
   - [x] Microetapa 1: Importação de extrato em CSV (ler arquivo, validar e lançar transações)
   - [x] Microetapa 2: Open Finance simulado (conectar a um banco fictício, consentimento e sincronizar)
-  - [ ] Microetapa 3: (a definir — metas de gasto por categoria / visual refinado)
+- Fase 6 — Entrada do site (landing + cadastro/login)
+  - [x] Microetapa 1: Separar o app em `app.html` (a tela que já existia virou o "depois do login")
+  - [x] Microetapa 2: Criar a biblioteca `auth.js` (listas de usuários, sessão, `hashSenha`, `exigirLogin`)
+  - [x] Microetapa 3: Página de cadastro (`cadastro.html` + `cadastro.js`) com validação e e-mail único
+  - [x] Microetapa 4: Página de login (`login.html` + `login.js`) que confere e-mail/senha e cria a sessão
+  - [x] Microetapa 5: Proteger o app (`exigirLogin`) e dados por usuário (prefixo `cf_<email>_`) + saudação e botão Sair
+  - [x] Microetapa 6: Landing (`index.html` + `entrar.css`) no estilo valuationia, com as cores do projeto
 
 ## Conceitos já ensinados
 - Arquivo, extensão (.html, .css, .js) e função de cada arquivo.
@@ -104,6 +121,14 @@ Fase 5 — Aperfeiçoamentos e diferenciais (Microetapas 1 e 2 concluídas — i
 - setTimeout: agendar código para rodar depois (assíncrono) — sensação de "conectando...".
 - `.checked` (checkbox) e `.disabled` (desabilitar botão enquanto conecta).
 - Objeto cujos valores são listas (dicionário de bancos → movimentações).
+- Autenticação simulada: cadastro/login sem servidor (tudo no localStorage).
+- Reutilização de código: uma "biblioteca" (auth.js) com funções compartilhadas entre páginas.
+- Sessão: marca no localStorage (`cf_sessao`) quem está logado; `exigirLogin()` expulsa quem não está.
+- Hash simples de senha (`hashSenha`) e por que NÃO substitui segurança real.
+- Dados por usuário: chave prefixada com o e-mail (`cf_<email>_...`) separa os dados de cada conta.
+- Navegação entre páginas (`window.location.href`) e `localStorage` compartilhado entre elas.
+- Página de roteamento de entrada: landing (index.html) → cadastro/login → app.html.
+- CSS moderno: variáveis (`:root`), grid de fundo com `mask-image`, animações (`@keyframes`, `animation-delay`), `-webkit-text-stroke`, fontes do Google (Plus Jakarta Sans / JetBrains Mono).
 
 ## Problemas pendentes
 Nenhum.
@@ -113,7 +138,7 @@ Nenhum.
 - Bug: transação sem valor era adicionada ao extrato. Causa: `Number("")` vira 0 e não havia checagem. Correção: validação `if (valor <= 0)` com `alert` e `return` nos dois formulários.
 
 ## Próxima microetapa
-Fase 5 — Microetapa 3 (a definir: metas de gasto por categoria OU visual refinado).
+Fase 7 (a definir). Sugestões: aplicar o visual da landing também às telas do app (mesma tipografia e cantos), metas de gasto por categoria, ou exportar relatório.
 
 ## Observações
 - Todo o conteúdo didático (explicações de cada microetapa, bugs corrigidos e GitHub) está salvo de forma permanente em **TUTORIAL.md** e regenerado em **TUTORIAL.pdf**.

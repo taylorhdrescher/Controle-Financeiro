@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Controle Financeiro</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div class="topo-app">
+      <h1>Meu Controle Financeiro</h1>
+      <div class="usuario">
+        <span id="usuario-atual"></span>
+        <button type="button" id="btn-sair">Sair</button>
+      </div>
+    </div>
+  </header>
+  <main>
+    <section>
+      <h2>Saldo atual</h2>
+      <p>R$ <span id="saldo"></span></p>
+    </section>
+
+    <section>
+      <h2>Resumo</h2>
+      <p>Receitas: <span id="total-receitas" class="receita"></span></p>
+      <p>Despesas: <span id="total-despesas" class="despesa"></span></p>
+    </section>
+
+    <section>
+      <h2>Adicionar receita</h2>
+      <form id="form-receita">
+        <label for="descricao">Descrição</label>
+        <input type="text" id="descricao" placeholder="Ex: Salário">
+        <label for="valor">Valor (R$)</label>
+        <input type="number" id="valor" step="0.01" min="0">
+        <button type="submit">Adicionar</button>
+      </form>
+    </section>
+
+    <section>
+      <h2>Adicionar despesa</h2>
+      <form id="form-despesa">
+        <label for="descricao-despesa">Descrição</label>
+        <input type="text" id="descricao-despesa" placeholder="Ex: Aluguel">
+        <label for="categoria-despesa">Categoria</label>
+        <select id="categoria-despesa">
+          <option>Moradia</option>
+          <option>Alimentação</option>
+          <option>Transporte</option>
+          <option>Lazer</option>
+          <option>Saúde</option>
+          <option>Outros</option>
+        </select>
+        <label for="valor-despesa">Valor (R$)</label>
+        <input type="number" id="valor-despesa" step="0.01" min="0">
+        <button type="submit">Adicionar</button>
+      </form>
+    </section>
+
+    <section>
+      <h2>Importar extrato (CSV)</h2>
+      <p class="dica">Formato: descricao,valor,tipo,categoria (uma transação por linha).</p>
+      <input type="file" id="arquivo-csv" accept=".csv">
+    </section>
+
+    <section>
+      <h2>Open Finance (simulado)</h2>
+      <p class="dica">Conexão fictícia com um banco. Nenhum dado real é usado — é só uma simulação.</p>
+      <label for="banco-openfinance">Instituição</label>
+      <select id="banco-openfinance">
+        <option>Banco Aurora</option>
+        <option>Banco Laranja</option>
+        <option>Fintech Pingo</option>
+      </select>
+      <label class="consentimento">
+        <input type="checkbox" id="consentimento-openfinance">
+        Autorizo o compartilhamento dos meus dados (simulado)
+      </label>
+      <button type="button" id="btn-openfinance">Conectar e importar</button>
+      <p id="status-openfinance"></p>
+    </section>
+
+    <section>
+      <h2>Gastos por categoria</h2>
+      <ul id="lista-categorias"></ul>
+    </section>
+
+    <section>
+      <h2>Extrato</h2>
+      <ul id="lista-transacoes"></ul>
+    </section>
+  </main>
+  <script src="auth.js"></script>
+  <script>exigirLogin();</script>
+  <script src="app.js"></script>
+</body>
+</html>

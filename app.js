@@ -1,5 +1,10 @@
-var saldo = Number(localStorage.getItem("saldo")) || 0;
-var transacoes = JSON.parse(localStorage.getItem("transacoes")) || [];
+exigirLogin();
+
+var usuario = usuarioAtual();
+var prefixo = "cf_" + (usuario ? usuario.email : "anon") + "_";
+
+var saldo = Number(localStorage.getItem(prefixo + "saldo")) || 0;
+var transacoes = JSON.parse(localStorage.getItem(prefixo + "transacoes")) || [];
 
 function formatarDinheiro(valor) {
   return "R$ " + valor.toFixed(2).replace(".", ",");
@@ -11,11 +16,11 @@ function ehDespesa(transacao) {
 
 function exibirSaldo() {
   document.getElementById("saldo").textContent = formatarDinheiro(saldo);
-  localStorage.setItem("saldo", saldo);
+  localStorage.setItem(prefixo + "saldo", saldo);
 }
 
 function salvarTransacoes() {
-  localStorage.setItem("transacoes", JSON.stringify(transacoes));
+  localStorage.setItem(prefixo + "transacoes", JSON.stringify(transacoes));
 }
 
 function exibirResumo() {
@@ -232,5 +237,8 @@ document.getElementById("btn-openfinance").addEventListener("click", function ()
     botao.disabled = false;
   }, 1500);
 });
+
+document.getElementById("usuario-atual").textContent = "Olá, " + (usuario ? usuario.nome : "") + "!";
+document.getElementById("btn-sair").addEventListener("click", sair);
 
 atualizarTela();
