@@ -7,26 +7,50 @@
   <meta name="description" content="Registre receitas e despesas, veja para onde o seu dinheiro vai e acompanhe tudo em um só lugar.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="entrar.css">
 </head>
 <body>
+  <button class="btn-sidebar-toggle" id="btn-sidebar">Menu</button>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-topo">
+      <div class="marca">Controle<span class="ponto">.</span>Financeiro</div>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="#inicio" class="nav-link ativo">Início</a>
+      <a href="#funcionalidades" class="nav-link">Funcionalidades</a>
+      <a href="#metodologia" class="nav-link">Metodologia</a>
+      <a href="#planos" class="nav-link">Planos</a>
+      <a href="#privacidade" class="nav-link">Privacidade & Segurança</a>
+      <a href="#sobre" class="nav-link">Sobre</a>
+      <a href="#faq" class="nav-link">FAQ</a>
+    </nav>
+    <div class="sidebar-rodape">
+      <a href="login.html" class="link">Entrar</a>
+      <a href="cadastro.html" class="botao botao-pequeno">Criar conta</a>
+    </div>
+  </aside>
+  <div class="overlay" id="overlay"></div>
+
   <header class="topo">
     <div class="marca">Controle<span class="ponto">.</span>Financeiro</div>
     <nav class="menu">
+      <a href="#funcionalidades" class="link">Funcionalidades</a>
+      <a href="#planos" class="link">Planos</a>
+      <a href="#privacidade" class="link">Privacidade</a>
       <a href="login.html" class="link">Entrar</a>
       <a href="cadastro.html" class="botao botao-pequeno">Criar conta</a>
     </nav>
   </header>
 
   <main>
-    <section class="hero">
+    <section class="hero" id="inicio">
       <p class="label surgir">Controle financeiro pessoal</p>
       <h1 class="surgir surgir-2">Seu dinheiro, finalmente <span class="vazado">sob controle</span>.</h1>
       <p class="subtitulo surgir surgir-3">Registre receitas e despesas, descubra para onde o seu dinheiro vai e acompanhe tudo em um só lugar — sem planilhas complicadas.</p>
       <div class="acoes surgir surgir-4">
-        <a href="cadastro.html" class="botao">Começar agora</a>
-        <a href="login.html" class="botao botao-secundario">Já tenho conta</a>
+        <a href="cadastro.html" class="botao">Começar agora — Grátis</a>
+        <a href="#funcionalidades" class="botao botao-secundario">Ver funcionalidades</a>
       </div>
     </section>
 
@@ -37,36 +61,222 @@
       </div>
     </div>
 
-    <section class="recursos">
-      <article class="card">
+    <section class="recursos" id="funcionalidades">
+      <article class="card reveal">
         <span class="num">01</span>
         <h3>Receitas e despesas</h3>
         <p>Adicione entradas e saídas em segundos e veja o saldo atualizar na hora.</p>
       </article>
-      <article class="card">
+      <article class="card reveal">
         <span class="num">02</span>
         <h3>Resumo por categoria</h3>
         <p>Descubra quanto você gasta em alimentação, transporte, moradia e muito mais.</p>
       </article>
-      <article class="card">
+      <article class="card reveal">
         <span class="num">03</span>
         <h3>Importe e conecte</h3>
         <p>Traga o seu extrato em CSV ou sincronize com um banco (simulado).</p>
       </article>
+      <article class="card reveal">
+        <span class="num">04</span>
+        <h3>Dados por usuário</h3>
+        <p>Cada conta tem seus próprios dados. Tudo fica separado e organizado no seu navegador.</p>
+      </article>
+      <article class="card reveal">
+        <span class="num">05</span>
+        <h3>Interface limpa e moderna</h3>
+        <p>Foco no que importa: visual minimalista, responsivo e pensado para ser usado todos os dias.</p>
+      </article>
+      <article class="card reveal">
+        <span class="num">06</span>
+        <h3>Rápido e leve</h3>
+        <p>Sem servidores pesados, sem dependências complexas. Carrega rápido em qualquer dispositivo.</p>
+      </article>
     </section>
 
-    <section class="cta">
+    <section class="secao" id="metodologia">
+      <div class="secao-cabecalho reveal">
+        <p class="label">Metodologia</p>
+        <h2>Aprendizado prático, sem complicação</h2>
+        <p class="subtitulo">Projeto didático pensado para quem está começando: cada etapa ensina um conceito de forma simples e aplicável.</p>
+      </div>
+      <div class="blocos">
+        <article class="bloco reveal">
+          <h3>Aprenda fazendo</h3>
+          <p>Teoria pequena, prática direto na tela. Você constrói enquanto entende o porquê de cada decisão.</p>
+        </article>
+        <article class="bloco reveal">
+          <h3>Microetapas</h3>
+          <p>Avanço em pequenos blocos. Mais fácil de assimilar, menos chance de se perder no caminho.</p>
+        </article>
+        <article class="bloco reveal">
+          <h3>Explicação clara</h3>
+          <p>Conceitos explicados em português simples, com exemplos reais e sem jargões desnecessários.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="secao" id="planos">
+      <div class="secao-cabecalho reveal">
+        <p class="label">Planos</p>
+        <h2>Comece grátis. Evolua quando quiser</h2>
+        <p class="subtitulo">Funcionalidades essenciais grátis. O <strong>PRO</strong> traz recursos pensados para te dar mais praticidade no dia a dia.</p>
+      </div>
+      <div class="planos">
+        <article class="plano reveal">
+          <h3>Grátis</h3>
+          <p class="preco">R$ 0<span>/mês</span></p>
+          <ul>
+            <li>Receitas, despesas e saldo</li>
+            <li>Resumo por categoria</li>
+            <li>Importação de extrato CSV</li>
+            <li>Open Finance simulado</li>
+            <li>Dados separados por conta</li>
+          </ul>
+          <a href="cadastro.html" class="botao botao-secundario botao-cheio">Começar grátis</a>
+        </article>
+        <article class="plano destaque reveal">
+          <span class="badge">Mais popular</span>
+          <h3>PRO</h3>
+          <p class="preco">R$ 19<span>/mês</span></p>
+          <ul>
+            <li><strong>Tudo do Grátis</strong></li>
+            <li><strong>Assistente IA</strong> (sugestões e organização)</li>
+            <li>Metas de gasto por categoria</li>
+            <li>Relatórios e exportação (em breve)</li>
+            <li>Suporte prioritário</li>
+          </ul>
+          <a href="cadastro.html" class="botao botao-cheio">Ativar PRO</a>
+        </article>
+        <article class="plano reveal">
+          <h3>Equipe</h3>
+          <p class="preco">Sob consulta<span></span></p>
+          <ul>
+            <li>Recursos PRO para múltiplas contas</li>
+            <li>Customizações para seu fluxo</li>
+            <li>Onboarding guiado</li>
+            <li>Suporte dedicado</li>
+          </ul>
+          <a href="#sobre" class="botao botao-secundario botao-cheio">Falar com a gente</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="secao" id="privacidade">
+      <div class="secao-cabecalho reveal">
+        <p class="label">Privacidade & Segurança</p>
+        <h2>Seus dados ficam no seu navegador</h2>
+        <p class="subtitulo">Sem servidor externo, sem coleta de dados em nuvem. O que você registra permanece no seu dispositivo.</p>
+      </div>
+      <div class="blocos">
+        <article class="bloco reveal">
+          <h3>100% local</h3>
+          <p>Usamos <strong>localStorage</strong> do seu navegador. Os dados não saem do seu computador/celular.</p>
+        </article>
+        <article class="bloco reveal">
+          <h3>Autenticação simulada</h3>
+          <p>O login/cadastro é didático (apenas para separar contas). Em um app real, senhas seriam tratadas com segurança no servidor.</p>
+        </article>
+        <article class="bloco reveal">
+          <h3>Sem rastreamento</h3>
+          <p>Não usamos analytics, cookies de terceiros ou ferramentas de rastreamento. Seu uso é privado por padrão.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="secao" id="sobre">
+      <div class="secao-cabecalho reveal">
+        <p class="label">Sobre</p>
+        <h2>Projeto acadêmico, com propósito prático</h2>
+        <p class="subtitulo">Criado como projeto de faculdade, com acompanhamento didático microetapa por microetapa. Foco em ensinar HTML, CSS, JavaScript e boas práticas de organização.</p>
+      </div>
+      <div class="blocos">
+        <article class="bloco reveal">
+          <h3>Didático</h3>
+          <p>Tudo documentado em TUTORIAL.md/ebook, com explicações simples para quem está começando.</p>
+        </article>
+        <article class="bloco reveal">
+          <h3>Responsivo</h3>
+          <p>Funciona bem no computador e no celular, com layout pensado para diferentes telas.</p>
+        </article>
+        <article class="bloco reveal">
+          <h3>Código limpo</h3>
+          <p>Sem frameworks, JavaScript puro. Fácil de ler, entender e evoluir.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="secao" id="faq">
+      <div class="secao-cabecalho reveal">
+        <p class="label">FAQ</p>
+        <h2>Perguntas frequentes</h2>
+        <p class="subtitulo">As dúvidas mais comuns, respondidas de forma simples.</p>
+      </div>
+      <div class="faq">
+        <details class="faq-item reveal">
+          <summary>Os meus dados vão para a nuvem?</summary>
+          <p>Não. Tudo é salvo no <strong>localStorage</strong> do seu navegador. Os dados ficam no seu dispositivo.</p>
+        </details>
+        <details class="faq-item reveal">
+          <summary>O login/cadastro é seguro de verdade?</summary>
+          <p>É uma <strong>simulação didática</strong>. Não usa servidor nem criptografia forte. Serve para aprender o fluxo, não para guardar senhas sensíveis.</p>
+        </details>
+        <details class="faq-item reveal">
+          <summary>Funciona no celular?</summary>
+          <p>Sim. O site é responsivo e funciona bem em navegadores mobile (Chrome, Edge, Safari).</p>
+        </details>
+        <details class="faq-item reveal">
+          <summary>O que é o Assistente IA no PRO?</summary>
+          <p>Uma sugestão de recurso futuro: um assistente para ajudar na organização financeira (análises simples e dicas), pensado para manter tudo leve e útil.</p>
+        </details>
+        <details class="faq-item reveal">
+          <summary>Preciso instalar alguma coisa?</summary>
+          <p>Não. É só abrir o site no navegador. Funciona abrindo os arquivos localmente ou hospedado.</p>
+        </details>
+      </div>
+    </section>
+
+    <section class="cta reveal">
       <h2>Crie sua conta grátis</h2>
       <p>Leva menos de um minuto. Seus dados ficam guardados no seu próprio navegador.</p>
       <div class="acoes">
-        <a href="cadastro.html" class="botao">Criar conta</a>
+        <a href="cadastro.html" class="botao">Começar agora</a>
         <a href="login.html" class="botao botao-secundario">Entrar</a>
       </div>
     </section>
   </main>
 
   <footer class="rodape">
-    <p>Projeto acadêmico — cada conta guarda os dados no seu próprio navegador.</p>
+    <div class="rodape-grid">
+      <div>
+        <div class="marca">Controle<span class="ponto">.</span>Financeiro</div>
+        <p>Projeto acadêmico — cada conta guarda os dados no seu próprio navegador.</p>
+      </div>
+      <div>
+        <h4>Produto</h4>
+        <ul>
+          <li><a href="#funcionalidades">Funcionalidades</a></li>
+          <li><a href="#planos">Planos</a></li>
+          <li><a href="#metodologia">Metodologia</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Empresa</h4>
+        <ul>
+          <li><a href="#sobre">Sobre</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="#privacidade">Privacidade & Segurança</a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="copy">© 2026 Controle Financeiro</p>
   </footer>
+
+  <script src="landing.js"></script>
 </body>
 </html>
