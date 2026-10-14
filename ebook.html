@@ -48,7 +48,7 @@
   <li>Fase 3 &mdash; Categorias e organiza&ccedil;&atilde;o (3 microetapas)</li>
   <li>Fase 4 &mdash; Resumo e total por categoria (3 microetapas)</li>
   <li>Fase 5 &mdash; Aperfei&ccedil;oamentos e diferenciais (2 microetapas)</li>
-  <li>Fase 6 &mdash; Entrada do site: landing + cadastro/login (6 microetapas)</li>
+  <li>Fase 6 &mdash; Entrada do site: landing + cadastro/login (7 microetapas)</li>
   <li>GitHub: subindo o projeto para a nuvem</li>
   <li>Gloss&aacute;rio: conceitos aprendidos</li>
   <li>Pr&oacute;ximos passos</li>
@@ -630,6 +630,18 @@ var saldo = Number(localStorage.getItem(prefixo + "saldo")) || 0;</pre>
 <p><strong>Teste:</strong> abra o <code>index.html</code> &rarr; Criar conta &rarr; cadastre &rarr; fa&ccedil;a login &rarr; o app abre com "Ol&aacute;, ...". Recarregue (F5): continua logado. Clique em <strong>Sair</strong>: volta para a landing e o app deixa de abrir.</p>
 <p><strong>Li&ccedil;&atilde;o:</strong> adicionar login mudou a <strong>arquitetura</strong> do site (de 1 para v&aacute;rias p&aacute;ginas) e ensinou dois temas de ouro: <strong>reutilizar c&oacute;digo</strong> (auth.js) e <strong>organizar dados</strong> (prefixo por usu&aacute;rio).</p>
 
+<h2>Microetapa 7 &mdash; Aplicar o visual da landing ao app</h2>
+<p>O app ainda usava Arial, cantos arredondados (8px) e cores repetidas. Deixamos o <strong>app com a mesma cara da landing</strong>, para o site inteiro parecer um s&oacute;.</p>
+<p><strong>O que mudou em <code>style.css</code>:</strong></p>
+<ul>
+  <li><strong>Fontes</strong> iguais &agrave;s da landing (Plus Jakarta Sans + JetBrains Mono) via Google Fonts.</li>
+  <li><strong>Vari&aacute;veis em <code>:root</code></strong> (<code>--accent</code>, <code>--surface</code>...) &mdash; trocar uma cor muda tudo.</li>
+  <li><strong>Cantos retos</strong> (<code>border-radius: 2px</code>) no lugar dos arredondados.</li>
+  <li><strong>Grade de fundo + brilho laranja</strong> (mesmos pseudos <code>body::before</code>/<code>::after</code>).</li>
+  <li><strong>R&oacute;tulos</strong> em fonte mono, mai&uacute;sculos e espa&ccedil;ados (<code>h2</code>, <code>label</code>).</li>
+</ul>
+<p><strong>Bug corrigido de passagem:</strong> o saldo aparecia <strong>"R$ R$ 2500,00"</strong>. A fun&ccedil;&atilde;o <code>formatarDinheiro</code> j&aacute; coloca o "R$", mas o <code>app.html</code> tamb&eacute;m tinha um "R$" fixo &mdash; removemos o do HTML.</p>
+
 <h2 class="pagebreak">GITHUB &mdash; SUBINDO O PROJETO PARA A NUVEM</h2>
 <p><strong>Git</strong> = a "m&aacute;quina do tempo" (registra vers&otilde;es, d&aacute; para voltar no tempo). <strong>GitHub</strong> = servi&ccedil;o gr&aacute;tis que guarda o reposit&oacute;rio na nuvem (backup + compartilhamento).</p>
 <p><strong>Passos feitos:</strong></p>
@@ -744,9 +756,10 @@ var saldo = Number(localStorage.getItem(prefixo + "saldo")) || 0;</pre>
       <li>[x] Microetapa 4: login.</li>
       <li>[x] Microetapa 5: proteger o app + dados por usu&aacute;rio.</li>
       <li>[x] Microetapa 6: landing no estilo valuationia (cores do projeto).</li>
+      <li>[x] Microetapa 7: aplicar o visual da landing ao app (app.html + style.css).</li>
     </ul>
   </li>
-  <li>Pr&oacute;ximas ideias: aplicar o visual da landing tamb&eacute;m ao app, metas de gasto por categoria, exportar relat&oacute;rio.</li>
+  <li>Pr&oacute;ximas ideias: metas de gasto por categoria, exportar relat&oacute;rio.</li>
 </ul>
 
 </body>

@@ -1,19 +1,70 @@
+:root {
+  --bg: #111827;
+  --bg-deep: #0b1120;
+  --surface: #1f2937;
+  --border: #374151;
+  --border-forte: #4b5563;
+  --text: #f9fafb;
+  --muted: #9ca3af;
+  --muted-2: #6b7280;
+  --accent: #f97316;
+  --accent-strong: #ea580c;
+  --receita: #22c55e;
+  --despesa: #ef4444;
+  --font-display: "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
 body {
-  font-family: Arial, sans-serif;
   margin: 0;
-  background-color: #111827;
-  color: #f9fafb;
+  font-family: var(--font-display);
+  background-color: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(249, 250, 251, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(249, 250, 251, 0.035) 1px, transparent 1px);
+  background-size: 26px 26px;
+  -webkit-mask-image: radial-gradient(circle at 50% 0%, #000, transparent 70%);
+  mask-image: radial-gradient(circle at 50% 0%, #000, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  top: -300px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 720px;
+  height: 520px;
+  background: radial-gradient(circle, rgba(249, 115, 22, 0.18), transparent 65%);
+  filter: blur(20px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+body > * {
+  position: relative;
+  z-index: 1;
 }
 
 header {
-  background-color: #1f2937;
-  padding: 20px;
-  text-align: center;
-}
-
-header h1 {
-  color: #f97316;
-  margin: 0;
+  border-bottom: 1px solid var(--border);
 }
 
 .topo-app {
@@ -22,6 +73,17 @@ header h1 {
   align-items: center;
   gap: 10px;
   flex-wrap: wrap;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 18px 24px;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text);
 }
 
 .usuario {
@@ -31,69 +93,134 @@ header h1 {
 }
 
 #usuario-atual {
-  color: #9ca3af;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
 }
 
 #btn-sair {
   margin-top: 0;
-  background-color: #374151;
+  padding: 8px 16px;
+  background-color: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+  font-size: 0.85rem;
 }
 
 #btn-sair:hover {
-  background-color: #4b5563;
+  background-color: rgba(249, 250, 251, 0.06);
+  border-color: var(--muted);
 }
 
 main {
-  padding: 20px;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 26px 24px 60px;
 }
 
 section {
-  background-color: #1f2937;
-  padding: 20px;
-  border-radius: 8px;
-  margin-bottom: 20px;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 22px;
+  margin-bottom: 16px;
+}
+
+h2 {
+  margin: 0 0 16px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--accent);
 }
 
 label {
   display: block;
-  margin-top: 10px;
+  margin-top: 14px;
+  margin-bottom: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
 }
 
-input {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #374151;
-  border-radius: 4px;
-  background-color: #111827;
-  color: #f9fafb;
-}
-
+input,
 select {
   width: 100%;
-  padding: 8px;
-  border: 1px solid #374151;
-  border-radius: 4px;
-  background-color: #111827;
-  color: #f9fafb;
+  padding: 11px;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  background-color: var(--bg-deep);
+  color: var(--text);
+  font-size: 1rem;
+  font-family: var(--font-display);
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.18);
+}
+
+input[type="checkbox"] {
+  width: auto;
+  box-shadow: none;
+}
+
+input[type="file"] {
+  padding: 10px;
+  color: var(--muted);
+}
+
+.consentimento {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  text-transform: none;
+  letter-spacing: normal;
+  color: var(--text);
 }
 
 button {
-  margin-top: 10px;
-  padding: 10px 16px;
-  background-color: #f97316;
-  color: white;
-  border: none;
-  border-radius: 4px;
+  margin-top: 16px;
+  padding: 11px 20px;
+  background-color: var(--accent);
+  color: #111827;
+  border: 1px solid var(--accent);
+  border-radius: 2px;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
   cursor: pointer;
+  transition: background-color 0.18s ease, border-color 0.18s ease, transform 0.1s ease;
 }
 
 button:hover {
-  background-color: #ea580c;
+  background-color: var(--accent-strong);
+  border-color: var(--accent-strong);
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 #saldo {
-  font-size: 2em;
-  font-weight: bold;
+  font-family: var(--font-mono);
+  font-size: 2.2rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
 }
 
 ul {
@@ -103,42 +230,42 @@ ul {
 }
 
 li {
-  background-color: #111827;
-  padding: 10px;
-  border-radius: 6px;
+  background-color: var(--bg-deep);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 11px 13px;
   margin-bottom: 8px;
+  transition: border-color 0.25s ease;
+}
+
+li:hover {
+  border-color: var(--border-forte);
 }
 
 .dica {
-  color: #9ca3af;
-  font-size: 0.9em;
-}
-
-input[type="checkbox"] {
-  width: auto;
-}
-
-.consentimento {
-  font-size: 0.9em;
+  color: var(--muted);
+  font-size: 0.9rem;
 }
 
 #status-openfinance {
-  color: #9ca3af;
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
 }
 
 .receita {
-  color: #22c55e;
-  font-weight: bold;
+  color: var(--receita);
+  font-weight: 700;
 }
 
 .despesa {
-  color: #ef4444;
-  font-weight: bold;
+  color: var(--despesa);
+  font-weight: 700;
 }
 
-@media (min-width: 768px) {
-  main {
-    max-width: 700px;
-    margin: 0 auto;
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
   }
 }

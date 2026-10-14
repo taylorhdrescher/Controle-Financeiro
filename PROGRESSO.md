@@ -56,7 +56,7 @@ controle-financeiro/
 6. Fase 6 — Entrada do site: landing + cadastro/login ✅ concluída (landing estilo valuationia + auth simulada)
 
 ## Fase atual
-Fase 6 — Entrada do site concluída (landing, cadastro, login e proteção do app). Próxima: Fase 7 (a definir).
+Fase 6 — Entrada do site concluída (landing, cadastro, login, proteção do app e visual do app alinhado à landing). Próxima: Fase 7 (a definir).
 
 ## Microetapas concluídas
 - Fase 1 — Estrutura e interface básica
@@ -89,6 +89,7 @@ Fase 6 — Entrada do site concluída (landing, cadastro, login e proteção do 
   - [x] Microetapa 4: Página de login (`login.html` + `login.js`) que confere e-mail/senha e cria a sessão
   - [x] Microetapa 5: Proteger o app (`exigirLogin`) e dados por usuário (prefixo `cf_<email>_`) + saudação e botão Sair
   - [x] Microetapa 6: Landing (`index.html` + `entrar.css`) no estilo valuationia, com as cores do projeto
+  - [x] Microetapa 7: Aplicar o mesmo visual ao app (`app.html` + `style.css`) — fontes, cantos retos, grade de fundo, rótulos em fonte mono
 
 ## Conceitos já ensinados
 - Arquivo, extensão (.html, .css, .js) e função de cada arquivo.

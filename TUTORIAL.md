@@ -44,6 +44,7 @@
    - Microetapa 4: Login (login.html + login.js)
    - Microetapa 5: Proteger o app + dados por usuário
    - Microetapa 6: A landing (index.html + entrar.css)
+   - Microetapa 7: Aplicar o visual da landing ao app (app.html + style.css)
 7. GitHub: subindo o projeto para a nuvem
 8. Conceitos aprendidos até aqui (glossário)
 9. Próximos passos
@@ -898,6 +899,22 @@ Assim a Maria não vê os dados do João: cada conta tem suas próprias chaves (
 
 **Lição:** adicionar login mudou a **arquitetura** do site (de 1 para várias páginas) e ensinou dois temas de ouro: **reutilizar código** (auth.js) e **organizar dados** (prefixo por usuário). E reforçou que autenticação **de verdade** precisa de servidor — aqui é uma simulação didática.
 
+## Microetapa 7 — Aplicar o visual da landing ao app
+
+**O que é / por quê:** o app ainda usava Arial, cantos arredondados (8px) e cores "soltas" repetidas. Deixamos o **app com a mesma cara da landing**, para o site inteiro parecer um só.
+
+**O que mudou em `style.css`:**
+- **Fontes** iguais às da landing (Plus Jakarta Sans no texto, JetBrains Mono nos detalhes) via Google Fonts (`<link>` no `app.html`).
+- **Variáveis em `:root`** (`--accent`, `--surface`, `--border`...) — trocar uma cor muda tudo de uma vez.
+- **Cantos retos** (`border-radius: 2px`) no lugar dos 8px/4px/6px.
+- **Grade de fundo + brilho laranja** (os mesmos pseudo-elementos `body::before`/`::after` da landing).
+- **Rótulos e títulos** das seções em fonte mono, maiúsculos e espaçados (`h2`, `label`).
+- **Botões** laranja com texto escuro, foco dos campos com brilho laranja, listas como cartõezinhos com borda que clareia no hover.
+
+**Bug corrigido de passagem:** o saldo aparecia **"R$ R$ 2500,00"**. A função `formatarDinheiro` já coloca o "R$", mas o `app.html` também tinha um "R$" fixo antes do `<span>`. Removemos o "R$" do HTML.
+
+**Conceitos:** reaproveitar um estilo em várias páginas; usar variáveis CSS para manter a paleta num só lugar; pseudo-elementos para decoração de fundo.
+
 ---
 
 ## GITHUB — subindo o projeto para a nuvem
@@ -1028,4 +1045,5 @@ exibirSaldo();
   - [x] Microetapa 4: login.
   - [x] Microetapa 5: proteger o app + dados por usuário.
   - [x] Microetapa 6: landing no estilo valuationia (cores do projeto).
-- Próximas ideias: aplicar o visual da landing também ao app, metas de gasto por categoria, exportar relatório.
+  - [x] Microetapa 7: aplicar o visual da landing ao app (app.html + style.css).
+- Próximas ideias: metas de gasto por categoria, exportar relatório.
